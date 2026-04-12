@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg: #fff5f8;
+  --bg-soft: #ffe9f0;
+  --ink: #1a1518;
+  --gold: #c9a96e;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: #f5a4bf; color: #1a1518; }
+
+@layer components {
+  .container-aura { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
+  .h-display { @apply font-serif font-medium tracking-tight; }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink-900 text-white px-6 py-3
+           font-medium tracking-wide transition-all duration-300
+           hover:bg-ink-800 hover:shadow-soft active:scale-[0.98];
+  }
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-b from-gold-400 to-gold-600
+           text-ink-900 px-6 py-3 font-semibold tracking-wide shadow-gold transition
+           hover:from-gold-300 hover:to-gold-500 active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink-900/15
+           text-ink-900 px-6 py-3 font-medium tracking-wide transition hover:bg-white;
+  }
+  .card-soft {
+    @apply rounded-3xl bg-white/70 backdrop-blur border border-rose-150 shadow-soft;
+  }
+  .input-aura {
+    @apply w-full rounded-2xl bg-white border border-rose-150 px-4 py-3 text-ink-900
+           placeholder:text-ink-600/50 focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/30 transition;
+  }
+  .label-aura { @apply block text-xs uppercase tracking-widest2 text-ink-600 mb-1.5 font-medium; }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full bg-white/80 border border-rose-150 px-3 py-1
+           text-xs uppercase tracking-widest text-ink-700;
+  }
+  .gold-divider {
+    @apply h-px bg-gradient-to-r from-transparent via-gold-500/60 to-transparent;
+  }
+}
+
+/* Subtle radial decoration on hero */
+.hero-aura {
+  background:
+    radial-gradient(1200px 600px at 80% -10%, #fcd9e3 0%, transparent 55%),
+    radial-gradient(900px 500px at 0% 100%, #ffe6ee 0%, transparent 55%),
+    linear-gradient(180deg, #fff5f8 0%, #ffe9f0 100%);
+}

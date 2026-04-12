@@ -1,0 +1,463 @@
+{
+  "products": [
+    {
+      "id": "p_001",
+      "slug": "anillo-aurora-dorado",
+      "name": "Anillo Aurora",
+      "category": "anillos",
+      "description": "Anillo bañado en oro 18k con piedra zirconia talla brillante. Pieza minimalista, hipoalergénica y antimanchas, pensada para el uso diario sin perder elegancia. Acabado pulido espejo y aro confort que se adapta a cualquier dedo.",
+      "shortDescription": "Bañado en oro 18k · zirconia brillante",
+      "priceCOP": 89000,
+      "compareAtPriceCOP": 119000,
+      "images": [
+        "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=900&q=80",
+        "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=900&q=80"
+      ],
+      "variants": [
+        {
+          "id": "p_001_t6",
+          "label": "Talla 6",
+          "sku": "AUR-6",
+          "stock": 8,
+          "attributes": {
+            "talla": "6"
+          }
+        },
+        {
+          "id": "p_001_t7",
+          "label": "Talla 7",
+          "sku": "AUR-7",
+          "stock": 11,
+          "attributes": {
+            "talla": "7"
+          }
+        },
+        {
+          "id": "p_001_t8",
+          "label": "Talla 8",
+          "sku": "AUR-8",
+          "stock": 6,
+          "attributes": {
+            "talla": "8"
+          }
+        }
+      ],
+      "tags": [
+        "bestseller",
+        "oro",
+        "minimalista"
+      ],
+      "active": true,
+      "featured": true,
+      "createdAt": "2026-04-01T10:00:00.000Z"
+    },
+    {
+      "id": "p_002",
+      "slug": "collar-aura-luna",
+      "name": "Collar Aura Luna",
+      "category": "collares",
+      "description": "Collar de cadena delicada con dije de luna creciente. Plata 925 con baño dorado, antialérgico. Largo ajustable de 40 a 45 cm. Perfecto para superponer con otros collares.",
+      "shortDescription": "Plata 925 · dije luna · cadena ajustable",
+      "priceCOP": 119000,
+      "compareAtPriceCOP": 149000,
+      "images": [
+        "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=900&q=80",
+        "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=900&q=80"
+      ],
+      "variants": [
+        {
+          "id": "p_002_default",
+          "label": "Único",
+          "sku": "LUN-01",
+          "stock": 18,
+          "attributes": {}
+        }
+      ],
+      "tags": [
+        "nuevo",
+        "luna",
+        "plata"
+      ],
+      "active": true,
+      "featured": true,
+      "createdAt": "2026-04-02T10:00:00.000Z"
+    },
+    {
+      "id": "p_003",
+      "slug": "aretes-divina-perla",
+      "name": "Aretes Divina Perla",
+      "category": "aretes",
+      "description": "Aretes con perla natural cultivada y base de acero quirúrgico bañada en oro. Cierre tipo presión seguro. Hipoalergénicos, ideales para piel sensible.",
+      "shortDescription": "Perla natural · acero quirúrgico dorado",
+      "priceCOP": 75000,
+      "images": [
+        "https://images.unsplash.com/photo-1535632066274-65bca041e2bd?w=900&q=80",
+        "https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?w=900&q=80"
+      ],
+      "variants": [
+        {
+          "id": "p_003_default",
+          "label": "Único",
+          "sku": "PER-01",
+          "stock": 22,
+          "attributes": {}
+        }
+      ],
+      "tags": [
+        "clásico",
+        "perla"
+      ],
+      "active": true,
+      "featured": true,
+      "createdAt": "2026-04-03T10:00:00.000Z"
+    },
+    {
+      "id": "p_004",
+      "slug": "set-eterna-trio",
+      "name": "Set Eterna",
+      "category": "sets",
+      "description": "Set completo: collar + aretes + anillo bañados en oro 18k. Diseño coordinado en estilo minimalista, presentado en caja regalo Aura Divina. Ideal para regalo.",
+      "shortDescription": "Collar + aretes + anillo · caja regalo",
+      "priceCOP": 219000,
+      "compareAtPriceCOP": 289000,
+      "images": [
+        "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=900&q=80",
+        "https://images.unsplash.com/photo-1622398925373-3f91b1e275f5?w=900&q=80"
+      ],
+      "variants": [
+        {
+          "id": "p_004_t6",
+          "label": "Anillo Talla 6",
+          "sku": "ETER-6",
+          "stock": 3,
+          "attributes": {
+            "talla": "6"
+          }
+        },
+        {
+          "id": "p_004_t7",
+          "label": "Anillo Talla 7",
+          "sku": "ETER-7",
+          "stock": 5,
+          "attributes": {
+            "talla": "7"
+          }
+        },
+        {
+          "id": "p_004_t8",
+          "label": "Anillo Talla 8",
+          "sku": "ETER-8",
+          "stock": 3,
+          "attributes": {
+            "talla": "8"
+          }
+        }
+      ],
+      "tags": [
+        "regalo",
+        "set",
+        "premium"
+      ],
+      "active": true,
+      "featured": true,
+      "createdAt": "2026-04-04T10:00:00.000Z"
+    },
+    {
+      "id": "p_005",
+      "slug": "pulsera-celeste-charms",
+      "name": "Pulsera Celeste",
+      "category": "pulseras",
+      "description": "Pulsera con cadena fina y tres charms (estrella, corazón y luna). Bañada en oro 14k. Cierre de mosquetón. Largo ajustable 16-19 cm.",
+      "shortDescription": "Cadena fina · 3 charms · oro 14k",
+      "priceCOP": 95000,
+      "images": [
+        "https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=900&q=80"
+      ],
+      "variants": [
+        {
+          "id": "p_005_default",
+          "label": "Único",
+          "sku": "CEL-01",
+          "stock": 14,
+          "attributes": {}
+        }
+      ],
+      "tags": [
+        "charms",
+        "delicado"
+      ],
+      "active": true,
+      "featured": false,
+      "createdAt": "2026-04-05T10:00:00.000Z"
+    },
+    {
+      "id": "p_006",
+      "slug": "anillo-solitario-zen",
+      "name": "Anillo Solitario Zen",
+      "category": "anillos",
+      "description": "Solitario clásico con piedra cuadrada de zirconia. Acabado pulido espejo. Excelente alternativa al diamante.",
+      "shortDescription": "Solitario · zirconia cuadrada",
+      "priceCOP": 109000,
+      "images": [
+        "https://images.unsplash.com/photo-1620656798932-902a8da64d1c?w=900&q=80"
+      ],
+      "variants": [
+        {
+          "id": "p_006_t6",
+          "label": "Talla 6",
+          "sku": "ZEN-6",
+          "stock": 5,
+          "attributes": {
+            "talla": "6"
+          }
+        },
+        {
+          "id": "p_006_t7",
+          "label": "Talla 7",
+          "sku": "ZEN-7",
+          "stock": 7,
+          "attributes": {
+            "talla": "7"
+          }
+        }
+      ],
+      "tags": [
+        "solitario",
+        "clásico"
+      ],
+      "active": true,
+      "featured": false,
+      "createdAt": "2026-04-06T10:00:00.000Z"
+    },
+    {
+      "id": "p_007",
+      "slug": "aretes-cascada-dorada",
+      "name": "Aretes Cascada",
+      "category": "aretes",
+      "description": "Aretes largos estilo cascada con cadena fina dorada. Movimiento elegante, perfectos para ocasiones especiales.",
+      "shortDescription": "Aretes largos cascada · oro 14k",
+      "priceCOP": 85000,
+      "images": [
+        "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=900&q=80"
+      ],
+      "variants": [
+        {
+          "id": "p_007_default",
+          "label": "Único",
+          "sku": "CAS-01",
+          "stock": 10,
+          "attributes": {}
+        }
+      ],
+      "tags": [
+        "fiesta",
+        "elegante"
+      ],
+      "active": true,
+      "featured": false,
+      "createdAt": "2026-04-07T10:00:00.000Z"
+    },
+    {
+      "id": "p_008",
+      "slug": "collar-iniciales-divinas",
+      "name": "Collar Iniciales",
+      "category": "collares",
+      "description": "Collar personalizable con inicial. Letra dorada en cursiva, cadena delicada de 40-45 cm.",
+      "shortDescription": "Personalizable · inicial dorada",
+      "priceCOP": 99000,
+      "images": [
+        "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=900&q=80"
+      ],
+      "variants": [
+        {
+          "id": "p_008_default",
+          "label": "Único",
+          "sku": "INI-01",
+          "stock": 25,
+          "attributes": {}
+        }
+      ],
+      "tags": [
+        "personalizado"
+      ],
+      "active": true,
+      "featured": false,
+      "createdAt": "2026-04-08T10:00:00.000Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "f781e10c-43b9-48a7-9c24-31b2402eebfe",
+      "code": "AD-KM9E4M",
+      "status": "PENDING",
+      "items": [
+        {
+          "productId": "p_001",
+          "variantId": "p_001_t7",
+          "name": "Anillo Aurora",
+          "image": "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=900&q=80",
+          "unitPriceCOP": 89000,
+          "quantity": 1,
+          "subtotalCOP": 89000
+        }
+      ],
+      "subtotalCOP": 89000,
+      "shippingCOP": 8000,
+      "totalCOP": 97000,
+      "paymentMethod": "CASH_ON_DELIVERY",
+      "shipping": {
+        "fullName": "Prueba Cliente",
+        "phone": "3001234567",
+        "city": "Medellín",
+        "neighborhood": "El Poblado",
+        "addressLine1": "Cra 43A # 5-50",
+        "reference": "Torre 3"
+      },
+      "zoneId": "z_med_poblado",
+      "createdAt": "2026-04-12T20:17:56.275Z",
+      "updatedAt": "2026-04-12T20:17:56.275Z"
+    },
+    {
+      "id": "518d2ecb-ab17-4bae-81c0-076e8ea816b9",
+      "code": "AD-4N9G77",
+      "status": "PENDING",
+      "items": [
+        {
+          "productId": "p_004",
+          "variantId": "p_004_t6",
+          "name": "Set Eterna",
+          "image": "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=900&q=80",
+          "unitPriceCOP": 219000,
+          "quantity": 1,
+          "subtotalCOP": 219000
+        }
+      ],
+      "subtotalCOP": 219000,
+      "shippingCOP": 8000,
+      "totalCOP": 227000,
+      "paymentMethod": "CASH_ON_DELIVERY",
+      "shipping": {
+        "fullName": "Deisy Johana",
+        "phone": "3187307977",
+        "email": "deisy.molina.granada@gmail.com",
+        "addressLine1": "Calle sin salida",
+        "addressLine2": "",
+        "reference": "Aptp 3135",
+        "notes": "Nota 1",
+        "city": "Medellín",
+        "neighborhood": "Laureles"
+      },
+      "zoneId": "z_med_laureles",
+      "createdAt": "2026-04-12T20:19:08.521Z",
+      "updatedAt": "2026-04-12T20:19:08.521Z"
+    }
+  ],
+  "coverageZones": [
+    {
+      "id": "z_med_poblado",
+      "city": "Medellín",
+      "neighborhood": "El Poblado",
+      "postalCodes": [
+        "050021"
+      ],
+      "shippingCOP": 8000,
+      "active": true,
+      "estimatedDelivery": "Mismo día (pedidos antes de 2pm)"
+    },
+    {
+      "id": "z_med_laureles",
+      "city": "Medellín",
+      "neighborhood": "Laureles",
+      "postalCodes": [
+        "050031"
+      ],
+      "shippingCOP": 8000,
+      "active": true,
+      "estimatedDelivery": "Mismo día (pedidos antes de 2pm)"
+    },
+    {
+      "id": "z_med_envigado",
+      "city": "Envigado",
+      "neighborhood": "Envigado Centro",
+      "postalCodes": [
+        "055422"
+      ],
+      "shippingCOP": 10000,
+      "active": true,
+      "estimatedDelivery": "24h"
+    },
+    {
+      "id": "z_med_belen",
+      "city": "Medellín",
+      "neighborhood": "Belén",
+      "postalCodes": [
+        "050010"
+      ],
+      "shippingCOP": 9000,
+      "active": true,
+      "estimatedDelivery": "24h"
+    },
+    {
+      "id": "z_med_robledo",
+      "city": "Medellín",
+      "neighborhood": "Robledo",
+      "postalCodes": [
+        "050037"
+      ],
+      "shippingCOP": 9000,
+      "active": true,
+      "estimatedDelivery": "24h"
+    },
+    {
+      "id": "z_med_centro",
+      "city": "Medellín",
+      "neighborhood": "Centro",
+      "postalCodes": [
+        "050010"
+      ],
+      "shippingCOP": 7000,
+      "active": true,
+      "estimatedDelivery": "Mismo día (pedidos antes de 2pm)"
+    },
+    {
+      "id": "z_med_sabaneta",
+      "city": "Sabaneta",
+      "neighborhood": "Sabaneta Centro",
+      "postalCodes": [
+        "055450"
+      ],
+      "shippingCOP": 11000,
+      "active": true,
+      "estimatedDelivery": "24-48h"
+    },
+    {
+      "id": "z_med_itagui",
+      "city": "Itagüí",
+      "neighborhood": "Itagüí Centro",
+      "postalCodes": [
+        "055410"
+      ],
+      "shippingCOP": 10000,
+      "active": true,
+      "estimatedDelivery": "24h"
+    },
+    {
+      "id": "z_med_bello",
+      "city": "Bello",
+      "neighborhood": "Bello Centro",
+      "postalCodes": [
+        "051050"
+      ],
+      "shippingCOP": 11000,
+      "active": true,
+      "estimatedDelivery": "24-48h"
+    }
+  ],
+  "events": [],
+  "admins": [
+    {
+      "email": "admin@auradivina.co",
+      "passwordHash": "AuraDivina2026!"
+    }
+  ]
+}
