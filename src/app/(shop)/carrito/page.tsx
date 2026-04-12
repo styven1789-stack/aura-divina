@@ -4,9 +4,13 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useCart } from '@/store/cart.store';
 import { formatCOP } from '@/lib/money';
+import { useToast } from '@/components/ui/Toast';
+
+const FREE_SHIPPING_THRESHOLD = 200000;
 
 export default function CartPage() {
   const [mounted, setMounted] = useState(false);
+  const toast = useToast();
   useEffect(() => setMounted(true), []);
 
   const lines = useCart((s) => s.lines);
@@ -15,6 +19,10 @@ export default function CartPage() {
   const subtotal = useCart((s) => s.subtotal());
 
   if (!mounted) return null;
+
+  const remainingForFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
+  const progress = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100);
+  const qualifies = remainingForFreeShipping === 0;
 
   if (lines.length === 0) {
     return (
@@ -31,7 +39,27 @@ export default function CartPage() {
 
   return (
     <section className="container-aura py-12">
-      <h1 className="h-display text-4xl md:text-5xl text-ink-900 mb-10">Tu carrito</h1>
+      <h1 className="h-display text-4xl md:text-5xl text-ink-900 mb-6">Tu carrito</h1>
+
+      {/* Banner de envío promocional */}
+      <div className={'mb-8 rounded-3xl p-5 border ' + (qualifies ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-100/50 border-rose-150')}>
+        <div className="flex items-center gap-3 mb-2">
+          <span className="text-2xl">{qualifies ? '🎉' : '🚚'}</span>
+          <p className="text-sm text-ink-900">
+            {qualifies ? (
+              <strong>¡Felicidades! Tu pedido califica para empaque premium gratis.</strong>
+            ) : (
+              <>Te faltan <strong className="text-gold-600">{formatCOP(remainingForFreeShipping)}</strong> para empaque premium gratis ✨</>
+            )}
+          </p>
+        </div>
+        <div className="h-2 rounded-full bg-white/70 overflow-hidden">
+          <div
+            className="h-full bg-gradient-to-r from-gold-400 to-gold-600 transition-all duration-700"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
@@ -56,7 +84,10 @@ export default function CartPage() {
                 </div>
                 <p className="font-semibold">{formatCOP(l.unitPriceCOP * l.quantity)}</p>
                 <button
-                  onClick={() => remove(l.productId, l.variantId)}
+                  onClick={() => {
+                    remove(l.productId, l.variantId);
+                    toast.info('Eliminado del carrito', l.name);
+                  }}
                   className="text-xs uppercase tracking-widest text-rose-600 hover:text-rose-700"
                 >
                   Eliminar

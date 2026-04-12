@@ -4,11 +4,12 @@ import { useState } from 'react';
 import Link from 'next/link';
 import type { Product } from '@/core/domain/product';
 import { useCart } from '@/store/cart.store';
+import { useToast } from '@/components/ui/Toast';
 
 export default function AddToCart({ product }: { product: Product }) {
+  const toast = useToast();
   const [variantId, setVariantId] = useState(product.variants[0]?.id ?? '');
   const [qty, setQty] = useState(1);
-  const [added, setAdded] = useState(false);
   const add = useCart((s) => s.add);
 
   const variant = product.variants.find((v) => v.id === variantId) ?? product.variants[0];
@@ -25,8 +26,7 @@ export default function AddToCart({ product }: { product: Product }) {
       quantity: qty,
       variantLabel: variant.label,
     });
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2200);
+    toast.success('Agregado al carrito ✨', `${qty}x ${product.name}${variant.label !== 'Único' ? ' · ' + variant.label : ''}`);
   };
 
   const hasMultipleVariants = product.variants.length > 1;
@@ -73,7 +73,7 @@ export default function AddToCart({ product }: { product: Product }) {
 
       <div className="flex flex-col sm:flex-row gap-3">
         <button onClick={onAdd} disabled={outOfStock} className="btn-gold flex-1 disabled:opacity-50">
-          {outOfStock ? 'Sin stock' : added ? '✓ Agregado al carrito' : 'Agregar al carrito'}
+          {outOfStock ? 'Sin stock' : 'Agregar al carrito'}
         </button>
         <Link href="/carrito" className="btn-primary">
           Ver carrito →

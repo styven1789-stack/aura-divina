@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/store/cart.store';
 import { formatCOP } from '@/lib/money';
+import { useToast } from '@/components/ui/Toast';
 
 interface CoverageZone {
   id: string;
@@ -16,6 +17,7 @@ interface CoverageZone {
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const toast = useToast();
   const lines = useCart((s) => s.lines);
   const subtotal = useCart((s) => s.subtotal());
   const clear = useCart((s) => s.clear);
@@ -106,8 +108,11 @@ export default function CheckoutPage() {
       if (!res.ok) throw new Error(data?.message ?? 'Error al crear el pedido');
       setOrderResult({ code: data.order.code, whatsappDeepLink: data.whatsappDeepLink });
       clear();
+      toast.success('¡Pedido recibido!', `Código ${data.order.code}`);
     } catch (err: unknown) {
-      setError((err as Error).message);
+      const message = (err as Error).message;
+      setError(message);
+      toast.error('No se pudo crear el pedido', message);
     } finally {
       setSubmitting(false);
     }
@@ -116,14 +121,14 @@ export default function CheckoutPage() {
   if (orderResult) {
     return (
       <section className="container-aura py-20 max-w-2xl">
-        <div className="card-soft p-10 text-center">
-          <div className="text-6xl mb-4">🎉</div>
+        <div className="card-soft p-10 text-center animate-in zoom-in-95">
+          <div className="text-6xl mb-4 animate-pulse">🎉</div>
           <h1 className="h-display text-4xl text-ink-900">¡Pedido recibido!</h1>
           <p className="mt-3 text-ink-700/80">
-            Tu pedido <span className="font-semibold text-gold-600">{orderResult.code}</span> está pendiente de confirmación.
+            Tu pedido <span className="font-semibold text-gold-600 font-mono">{orderResult.code}</span> está pendiente de confirmación.
           </p>
           <p className="mt-2 text-sm text-ink-600">
-            Confírmanos por WhatsApp para preparar tu envío contraentrega.
+            <strong>Paso 1:</strong> Confírmanos por WhatsApp para preparar tu envío contraentrega.
           </p>
           <a
             href={orderResult.whatsappDeepLink}
@@ -133,9 +138,12 @@ export default function CheckoutPage() {
           >
             <WhatsappIcon /> Confirmar por WhatsApp
           </a>
-          <div className="mt-6">
-            <Link href="/" className="text-sm uppercase tracking-widest text-ink-600 hover:text-gold-600">
-              ← Volver al inicio
+          <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href={`/pedido/${orderResult.code}`} className="btn-ghost">
+              Ver estado del pedido →
+            </Link>
+            <Link href="/productos" className="text-sm uppercase tracking-widest text-ink-600 hover:text-gold-600 self-center">
+              Seguir comprando
             </Link>
           </div>
         </div>

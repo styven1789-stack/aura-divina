@@ -1,44 +1,86 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ORDER_STATUS_LABEL, ORDER_STATUS_COLOR, type Order, type OrderStatus } from '@/core/domain/order';
 import { formatCOP } from '@/lib/money';
 import ClientDate from '@/components/ClientDate';
+import { useToast } from '@/components/ui/Toast';
+import { useEscape } from '@/components/ui/Toast';
 
 const STATUSES: OrderStatus[] = ['PENDING', 'CONFIRMED_WHATSAPP', 'SHIPPED', 'DELIVERED', 'CANCELED'];
 
-export default function OrdersAdmin({ initial }: { initial: Order[] }) {
+export default function OrdersAdmin({ initial, initialStatus = 'all' }: { initial: Order[]; initialStatus?: OrderStatus | 'all' }) {
   const router = useRouter();
+  const toast = useToast();
   const [orders, setOrders] = useState(initial);
-  const [filter, setFilter] = useState<OrderStatus | 'all'>('all');
+  const [filter, setFilter] = useState<OrderStatus | 'all'>(initialStatus);
+  const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<Order | null>(null);
 
-  const visible = filter === 'all' ? orders : orders.filter((o) => o.status === filter);
+  useEscape(!!selected, () => setSelected(null));
+
+  const visible = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return orders.filter((o) => {
+      if (filter !== 'all' && o.status !== filter) return false;
+      if (!q) return true;
+      return (
+        o.code.toLowerCase().includes(q) ||
+        o.shipping.fullName.toLowerCase().includes(q) ||
+        o.shipping.phone.includes(q) ||
+        o.shipping.neighborhood.toLowerCase().includes(q)
+      );
+    });
+  }, [orders, filter, search]);
 
   const updateStatus = async (id: string, status: OrderStatus) => {
-    await fetch(`/api/orders/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status }),
-    });
-    setOrders((os) => os.map((o) => (o.id === id ? { ...o, status, updatedAt: new Date().toISOString() } : o)));
-    if (selected?.id === id) setSelected({ ...selected, status });
-    router.refresh();
+    try {
+      const r = await fetch(`/api/orders/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+      if (!r.ok) throw new Error('No se pudo actualizar');
+      setOrders((os) => os.map((o) => (o.id === id ? { ...o, status, updatedAt: new Date().toISOString() } : o)));
+      if (selected?.id === id) setSelected({ ...selected, status });
+      router.refresh();
+      toast.success('Pedido actualizado', `Nuevo estado: ${ORDER_STATUS_LABEL[status]}`);
+    } catch (err) {
+      toast.error('Error', (err as Error).message);
+    }
   };
 
   return (
     <div>
       <h1 className="h-display text-4xl text-ink-900 mb-2">Pedidos</h1>
-      <p className="text-ink-700/70 mb-6">{orders.length} pedidos en total</p>
+      <p className="text-ink-700/70 mb-6">{orders.length} pedidos en total · {visible.length} mostrados</p>
+
+      <div className="flex flex-col sm:flex-row gap-3 mb-4">
+        <div className="relative flex-1 max-w-md">
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Buscar por código, cliente, teléfono o barrio…"
+            className="input-aura !pl-11"
+          />
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-600">
+            <SearchIcon />
+          </span>
+        </div>
+      </div>
 
       <div className="flex flex-wrap gap-2 mb-6">
-        <FilterChip active={filter === 'all'} onClick={() => setFilter('all')}>Todos</FilterChip>
-        {STATUSES.map((s) => (
-          <FilterChip key={s} active={filter === s} onClick={() => setFilter(s)}>
-            {ORDER_STATUS_LABEL[s]}
-          </FilterChip>
-        ))}
+        <FilterChip active={filter === 'all'} onClick={() => setFilter('all')}>Todos · {orders.length}</FilterChip>
+        {STATUSES.map((s) => {
+          const count = orders.filter((o) => o.status === s).length;
+          return (
+            <FilterChip key={s} active={filter === s} onClick={() => setFilter(s)}>
+              {ORDER_STATUS_LABEL[s]}{count > 0 ? ` · ${count}` : ''}
+            </FilterChip>
+          );
+        })}
       </div>
 
       {visible.length === 0 ? (
@@ -181,5 +223,14 @@ function Info({ label, value }: { label: string; value: string }) {
       <p className="text-[10px] uppercase tracking-widest2 text-ink-600">{label}</p>
       <p className="text-ink-900">{value}</p>
     </div>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="11" cy="11" r="7" />
+      <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+    </svg>
   );
 }

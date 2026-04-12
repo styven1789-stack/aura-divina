@@ -4,11 +4,15 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { CoverageZone } from '@/core/domain/coverage-zone';
 import { formatCOP } from '@/lib/money';
+import { useToast } from '@/components/ui/Toast';
+import ConfirmModal from '@/components/ui/ConfirmModal';
 
 export default function ZonesAdmin({ initial }: { initial: CoverageZone[] }) {
   const router = useRouter();
+  const toast = useToast();
   const [zones, setZones] = useState(initial);
   const [creating, setCreating] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState<CoverageZone | null>(null);
   const [form, setForm] = useState<Partial<CoverageZone>>({
     city: 'Medellín',
     neighborhood: '',
@@ -25,21 +29,35 @@ export default function ZonesAdmin({ initial }: { initial: CoverageZone[] }) {
   };
 
   const create = async () => {
-    await fetch('/api/zones', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
-    });
-    setCreating(false);
-    setForm({ city: 'Medellín', neighborhood: '', shippingCOP: 8000, estimatedDelivery: '24h', active: true });
-    await refresh();
+    if (!form.neighborhood) {
+      toast.warning('Falta el barrio', 'Especifica el sector exacto.');
+      return;
+    }
+    try {
+      const r = await fetch('/api/zones', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (!r.ok) throw new Error('No se pudo crear');
+      setCreating(false);
+      setForm({ city: 'Medellín', neighborhood: '', shippingCOP: 8000, estimatedDelivery: '24h', active: true });
+      await refresh();
+      toast.success('Zona creada', `${form.neighborhood}, ${form.city}`);
+    } catch (err) {
+      toast.error('Error', (err as Error).message);
+    }
   };
 
-  const remove = async (id: string) => {
-    if (!confirm('¿Eliminar esta zona?')) return;
-    await fetch(`/api/zones?id=${id}`, { method: 'DELETE' });
-    setZones((zs) => zs.filter((z) => z.id !== id));
-    router.refresh();
+  const remove = async (zone: CoverageZone) => {
+    try {
+      await fetch(`/api/zones?id=${zone.id}`, { method: 'DELETE' });
+      setZones((zs) => zs.filter((z) => z.id !== zone.id));
+      router.refresh();
+      toast.success('Zona eliminada', `${zone.neighborhood}, ${zone.city}`);
+    } catch (err) {
+      toast.error('Error', (err as Error).message);
+    }
   };
 
   return (
@@ -89,13 +107,23 @@ export default function ZonesAdmin({ initial }: { initial: CoverageZone[] }) {
                 <td>{z.estimatedDelivery}</td>
                 <td><span className={`chip ${z.active ? '' : 'opacity-50'}`}>{z.active ? 'Activa' : 'Inactiva'}</span></td>
                 <td className="text-right pr-4">
-                  <button onClick={() => remove(z.id)} className="text-xs uppercase tracking-widest text-rose-600 hover:text-rose-700">Borrar</button>
+                  <button onClick={() => setConfirmDelete(z)} className="text-xs uppercase tracking-widest text-rose-600 hover:text-rose-700">Borrar</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <ConfirmModal
+        open={!!confirmDelete}
+        title="¿Eliminar zona de cobertura?"
+        description={confirmDelete ? `"${confirmDelete.neighborhood}, ${confirmDelete.city}" dejará de estar disponible para nuevos pedidos.` : ''}
+        confirmLabel="Sí, eliminar"
+        variant="danger"
+        onConfirm={async () => { if (confirmDelete) await remove(confirmDelete); }}
+        onClose={() => setConfirmDelete(null)}
+      />
     </div>
   );
 }

@@ -55,6 +55,18 @@ html, body {
   }
 }
 
+/* Animaciones minimal-CSS (sustitutas de tailwindcss-animate) */
+@keyframes fade-in-css { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slide-in-from-right-css { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes slide-in-from-bottom-css { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes zoom-in-css { from { transform: scale(.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.animate-in { animation-duration: .24s; animation-timing-function: cubic-bezier(.2,.8,.2,1); animation-fill-mode: both; }
+.fade-in { animation-name: fade-in-css; }
+.slide-in-from-right-2, .slide-in-from-right-4 { animation-name: slide-in-from-right-css; }
+.slide-in-from-bottom-2 { animation-name: slide-in-from-bottom-css; }
+.zoom-in-95 { animation-name: zoom-in-css; }
+
 /* Subtle radial decoration on hero */
 .hero-aura {
   background:

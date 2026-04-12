@@ -34,7 +34,7 @@ export default function WhatsappFab() {
   }, []);
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
+    <div className="fixed bottom-20 right-5 md:bottom-5 z-40 flex flex-col items-end gap-3">
       {/* Mini-menú de acciones */}
       {open && (
         <div className="animate-in fade-in slide-in-from-bottom-2 flex flex-col gap-2 mb-1">
