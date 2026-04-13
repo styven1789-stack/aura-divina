@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Logo } from './brand/Logo';
+import { InstagramIcon, FacebookIcon } from './icons';
 
 export default function Footer() {
   return (
@@ -9,7 +10,7 @@ export default function Footer() {
           <Logo variant="full" invert />
           <p className="mt-6 max-w-md text-sm text-rose-150/80 leading-relaxed">
             Aura Divina es una marca colombiana de accesorios premium para mujeres que aman brillar
-            con autenticidad. Diseños minimalistas, materiales hipoalergénicos y un servicio de
+            con autenticidad. Diseños minimalistas, materiales de calidad y un servicio de
             contraentrega en toda Medellín.
           </p>
           <div className="mt-6 flex items-center gap-3">
@@ -20,7 +21,7 @@ export default function Footer() {
               aria-label="Instagram @auradivina.shoping"
               className="group flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/5 hover:bg-gold-500 hover:text-ink-900 border border-white/10 hover:border-gold-500 transition"
             >
-              <SocialInstagram />
+              <InstagramIcon size={18} />
               <span className="text-xs uppercase tracking-widest">@auradivina.shoping</span>
             </a>
             <a
@@ -30,7 +31,7 @@ export default function Footer() {
               aria-label="Facebook"
               className="grid place-items-center w-11 h-11 rounded-full bg-white/5 hover:bg-gold-500 hover:text-ink-900 border border-white/10 hover:border-gold-500 transition"
             >
-              <SocialFacebook />
+              <FacebookIcon size={18} />
             </a>
             <a
               href="https://wa.me/573187307977"
@@ -72,25 +73,9 @@ export default function Footer() {
   );
 }
 
-function SocialInstagram() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <rect x="2" y="2" width="20" height="20" rx="5" />
-      <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
-      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-function SocialFacebook() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
-    </svg>
-  );
-}
 function SocialWhatsapp() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M20.52 3.48A11.93 11.93 0 0012 0C5.37 0 0 5.37 0 12a11.9 11.9 0 001.64 6L0 24l6.18-1.62A11.93 11.93 0 0012 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.21-3.48-8.52z" />
     </svg>
   );

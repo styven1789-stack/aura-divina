@@ -8,5 +8,7 @@ export interface OrderRepository {
   findById(id: string): Promise<Order | null>;
   findByCode(code: string): Promise<Order | null>;
   list(filter?: { status?: OrderStatus }): Promise<Order[]>;
+  findByUserId(userId: string): Promise<Order[]>;
+  findUnclaimedByEmail(email: string): Promise<Order[]>;
   updateStatus(id: string, status: OrderStatus): Promise<void>;
 }

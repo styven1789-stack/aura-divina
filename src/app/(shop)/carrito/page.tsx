@@ -1,10 +1,14 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useCart } from '@/store/cart.store';
 import { formatCOP } from '@/lib/money';
 import { useToast } from '@/components/ui/Toast';
+import EmptyState from '@/components/ui/EmptyState';
+import PriceDisplay from '@/components/ui/PriceDisplay';
+import { Bag, Plus, Minus, SparkleIcon } from '@/components/icons';
 
 const FREE_SHIPPING_THRESHOLD = 200000;
 
@@ -26,13 +30,13 @@ export default function CartPage() {
 
   if (lines.length === 0) {
     return (
-      <section className="container-aura py-24 text-center">
-        <div className="text-6xl mb-4">✨</div>
-        <h1 className="h-display text-4xl text-ink-900">Tu carrito está esperando brillar</h1>
-        <p className="text-ink-700/70 mt-3">Agrega piezas de nuestra colección.</p>
-        <Link href="/productos" className="btn-gold mt-8 inline-flex">
-          Explorar la tienda
-        </Link>
+      <section className="container-aura py-20 max-w-2xl">
+        <EmptyState
+          icon={<Bag size={40} />}
+          title="Tu joyero aún está vacío"
+          description="Agrega piezas de nuestra colección y comienza a brillar."
+          action={{ label: 'Explorar productos →', href: '/productos' }}
+        />
       </section>
     );
   }
@@ -44,12 +48,14 @@ export default function CartPage() {
       {/* Banner de envío promocional */}
       <div className={'mb-8 rounded-3xl p-5 border ' + (qualifies ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-100/50 border-rose-150')}>
         <div className="flex items-center gap-3 mb-2">
-          <span className="text-2xl">{qualifies ? '🎉' : '🚚'}</span>
+          <span className="text-gold-600">
+            <SparkleIcon size={22} />
+          </span>
           <p className="text-sm text-ink-900">
             {qualifies ? (
               <strong>¡Felicidades! Tu pedido califica para empaque premium gratis.</strong>
             ) : (
-              <>Te faltan <strong className="text-gold-600">{formatCOP(remainingForFreeShipping)}</strong> para empaque premium gratis ✨</>
+              <>Te faltan <strong className="text-gold-700">{formatCOP(remainingForFreeShipping)}</strong> para empaque premium gratis ✨</>
             )}
           </p>
         </div>
@@ -64,36 +70,51 @@ export default function CartPage() {
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
           {lines.map((l) => (
-            <div key={l.productId + l.variantId} className="card-soft p-4 flex gap-4 items-center">
+            <article key={l.productId + l.variantId} className="card-soft p-4 flex gap-4 items-center">
               {l.image && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={l.image} alt="" className="w-24 h-24 rounded-2xl object-cover" />
+                <div className="relative w-24 h-24 rounded-2xl overflow-hidden bg-rose-100 shrink-0">
+                  <Image src={l.image} alt="" fill sizes="96px" className="object-cover" />
+                </div>
               )}
-              <div className="flex-1">
-                <h3 className="font-serif text-xl text-ink-900">{l.name}</h3>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-serif text-xl text-ink-900 truncate">{l.name}</h3>
                 {l.variantLabel && (
-                  <p className="text-xs uppercase tracking-widest text-ink-600 mt-0.5">{l.variantLabel}</p>
+                  <p className="text-[10px] uppercase tracking-widest text-ink-600 mt-0.5">{l.variantLabel}</p>
                 )}
-                <p className="text-sm text-gold-600 mt-1">{formatCOP(l.unitPriceCOP)}</p>
+                <div className="mt-1">
+                  <PriceDisplay price={l.unitPriceCOP} size="sm" />
+                </div>
               </div>
               <div className="flex flex-col items-end gap-2">
                 <div className="inline-flex items-center rounded-full bg-white border border-rose-150">
-                  <button onClick={() => setQty(l.productId, l.variantId, l.quantity - 1)} className="px-3 py-1.5">−</button>
-                  <span className="px-3 text-sm">{l.quantity}</span>
-                  <button onClick={() => setQty(l.productId, l.variantId, l.quantity + 1)} className="px-3 py-1.5">+</button>
+                  <button
+                    onClick={() => setQty(l.productId, l.variantId, l.quantity - 1)}
+                    aria-label="Disminuir cantidad"
+                    className="grid place-items-center w-9 h-9 text-ink-700 hover:bg-rose-100 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+                  >
+                    <Minus size={14} />
+                  </button>
+                  <span className="px-2 text-sm min-w-[1.5rem] text-center">{l.quantity}</span>
+                  <button
+                    onClick={() => setQty(l.productId, l.variantId, l.quantity + 1)}
+                    aria-label="Aumentar cantidad"
+                    className="grid place-items-center w-9 h-9 text-ink-700 hover:bg-rose-100 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+                  >
+                    <Plus size={14} />
+                  </button>
                 </div>
-                <p className="font-semibold">{formatCOP(l.unitPriceCOP * l.quantity)}</p>
+                <p className="font-semibold text-ink-900">{formatCOP(l.unitPriceCOP * l.quantity)}</p>
                 <button
                   onClick={() => {
                     remove(l.productId, l.variantId);
-                    toast.info('Eliminado del carrito', l.name);
+                    toast.info('Quitado del carrito', l.name);
                   }}
-                  className="text-xs uppercase tracking-widest text-rose-600 hover:text-rose-700"
+                  className="text-[10px] uppercase tracking-widest text-rose-600 hover:text-rose-700"
                 >
                   Eliminar
                 </button>
               </div>
-            </div>
+            </article>
           ))}
         </div>
 

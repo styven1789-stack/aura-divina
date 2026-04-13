@@ -1,12 +1,14 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ORDER_STATUS_LABEL, ORDER_STATUS_COLOR, type Order, type OrderStatus } from '@/core/domain/order';
+import { ORDER_STATUS_LABEL, ORDER_STATUS_COLOR, canTransitionOrderStatus, type Order, type OrderStatus } from '@/core/domain/order';
 import { formatCOP } from '@/lib/money';
 import ClientDate from '@/components/ClientDate';
 import { useToast } from '@/components/ui/Toast';
 import { useEscape } from '@/components/ui/Toast';
+import ConfirmModal from '@/components/ui/ConfirmModal';
 
 const STATUSES: OrderStatus[] = ['PENDING', 'CONFIRMED_WHATSAPP', 'SHIPPED', 'DELIVERED', 'CANCELED'];
 
@@ -17,8 +19,9 @@ export default function OrdersAdmin({ initial, initialStatus = 'all' }: { initia
   const [filter, setFilter] = useState<OrderStatus | 'all'>(initialStatus);
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<Order | null>(null);
+  const [pending, setPending] = useState<{ order: Order; next: OrderStatus } | null>(null);
 
-  useEscape(!!selected, () => setSelected(null));
+  useEscape(!!selected && !pending, () => setSelected(null));
 
   const visible = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -41,7 +44,10 @@ export default function OrdersAdmin({ initial, initialStatus = 'all' }: { initia
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       });
-      if (!r.ok) throw new Error('No se pudo actualizar');
+      if (!r.ok) {
+        const body = (await r.json().catch(() => ({}))) as { message?: string };
+        throw new Error(body.message || 'No se pudo actualizar');
+      }
       setOrders((os) => os.map((o) => (o.id === id ? { ...o, status, updatedAt: new Date().toISOString() } : o)));
       if (selected?.id === id) setSelected({ ...selected, status });
       router.refresh();
@@ -151,8 +157,9 @@ export default function OrdersAdmin({ initial, initialStatus = 'all' }: { initia
               {selected.items.map((it, i) => (
                 <div key={i} className="flex items-center gap-3 p-2 bg-white/70 rounded-2xl">
                   {it.image && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={it.image} alt="" className="w-12 h-12 rounded-xl object-cover" />
+                    <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-rose-100 shrink-0">
+                      <Image src={it.image} alt="" fill sizes="48px" className="object-cover" />
+                    </div>
                   )}
                   <div className="flex-1">
                     <p className="font-medium">{it.name}</p>
@@ -172,17 +179,27 @@ export default function OrdersAdmin({ initial, initialStatus = 'all' }: { initia
             <div className="mt-6">
               <p className="label-aura">Cambiar estado</p>
               <div className="flex flex-wrap gap-2">
-                {STATUSES.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => updateStatus(selected.id, s)}
-                    className={`text-xs uppercase tracking-widest px-3 py-2 rounded-full border ${
-                      selected.status === s ? 'bg-ink-900 text-white border-ink-900' : 'bg-white border-rose-150 hover:border-gold-500'
-                    }`}
-                  >
-                    {ORDER_STATUS_LABEL[s]}
-                  </button>
-                ))}
+                {STATUSES.map((s) => {
+                  const isCurrent = selected.status === s;
+                  const allowed = isCurrent || canTransitionOrderStatus(selected.status, s);
+                  return (
+                    <button
+                      key={s}
+                      onClick={() => setPending({ order: selected, next: s })}
+                      disabled={!allowed || isCurrent}
+                      title={!allowed ? `No se puede pasar de ${ORDER_STATUS_LABEL[selected.status]} a ${ORDER_STATUS_LABEL[s]}` : undefined}
+                      className={`text-xs uppercase tracking-widest px-3 py-2 rounded-full border transition ${
+                        isCurrent
+                          ? 'bg-ink-900 text-white border-ink-900 cursor-default'
+                          : allowed
+                          ? 'bg-white border-rose-150 hover:border-gold-500'
+                          : 'bg-rose-50 border-rose-150 text-ink-400 cursor-not-allowed opacity-50'
+                      }`}
+                    >
+                      {ORDER_STATUS_LABEL[s]}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -199,6 +216,38 @@ export default function OrdersAdmin({ initial, initialStatus = 'all' }: { initia
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        open={!!pending}
+        title="Cambiar estado del pedido"
+        description={
+          pending
+            ? `Pedido ${pending.order.code} (${pending.order.shipping.fullName}). Pasará de "${ORDER_STATUS_LABEL[pending.order.status]}" a "${ORDER_STATUS_LABEL[pending.next]}". Esta acción no se puede revertir.`
+            : ''
+        }
+        variant={
+          pending?.next === 'CANCELED'
+            ? 'danger'
+            : pending?.next === 'SHIPPED' || pending?.next === 'DELIVERED'
+            ? 'warning'
+            : 'info'
+        }
+        confirmLabel={
+          pending?.next === 'CANCELED'
+            ? 'Cancelar pedido'
+            : pending?.next === 'SHIPPED'
+            ? 'Marcar como enviado'
+            : pending?.next === 'DELIVERED'
+            ? 'Marcar como entregado'
+            : 'Confirmar'
+        }
+        cancelLabel="Volver"
+        onConfirm={async () => {
+          if (!pending) return;
+          await updateStatus(pending.order.id, pending.next);
+        }}
+        onClose={() => setPending(null)}
+      />
     </div>
   );
 }

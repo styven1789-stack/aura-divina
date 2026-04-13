@@ -1,9 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Logo } from './brand/Logo';
 import { useCart } from '@/store/cart.store';
+import { Bag, User, MenuIcon, InstagramIcon, FacebookIcon } from './icons';
 
 const NAV = [
   { href: '/', label: 'Inicio' },
@@ -14,17 +17,53 @@ const NAV = [
   { href: '/pedido', label: 'Rastrear' },
 ];
 
+interface MeUser {
+  id: string;
+  name: string;
+  email: string;
+  avatarUrl?: string;
+}
+
 export default function Navbar() {
+  const router = useRouter();
   const count = useCart((s) => s.lines.reduce((a, l) => a + l.quantity, 0));
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
+  const [me, setMe] = useState<MeUser | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then((r) => r.json())
+      .then((d: { user: MeUser | null }) => setMe(d.user))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false);
+    };
+    document.addEventListener('mousedown', onClick);
+    return () => document.removeEventListener('mousedown', onClick);
+  }, [menuOpen]);
+
+  const logout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    setMe(null);
+    setMenuOpen(false);
+    router.push('/');
+    router.refresh();
+  };
 
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md bg-rose-50/85 border-b border-rose-150">
-      <div className="container-aura flex items-center justify-between h-20">
+      <div className="container-aura flex items-center justify-between h-20 gap-8">
         <Link href="/" className="shrink-0">
-          <Logo variant="horizontal" />
+          <Logo variant="horizontal" size="sm" />
         </Link>
 
         <nav className="hidden md:flex items-center gap-7">
@@ -59,20 +98,60 @@ export default function Navbar() {
             <FacebookIcon />
           </a>
           <Link href="/carrito" className="relative btn-ghost !py-2.5 !px-4">
-            <CartIcon />
-            <span className="text-sm">Carrito</span>
+            <Bag size={18} />
+            <span className="text-sm hidden sm:inline">Carrito</span>
             {mounted && count > 0 && (
               <span className="absolute -top-2 -right-2 bg-gold-500 text-ink-900 text-[10px] font-bold rounded-full w-5 h-5 grid place-items-center shadow">
                 {count}
               </span>
             )}
           </Link>
+
+          {mounted && !me && (
+            <Link href="/cuenta/ingresar" className="hidden md:inline-flex btn-ghost !py-2.5 !px-4">
+              <User size={16} />
+              <span className="text-sm">Ingresar</span>
+            </Link>
+          )}
+          {mounted && me && (
+            <div className="relative hidden md:block" ref={menuRef}>
+              <button
+                onClick={() => setMenuOpen((v) => !v)}
+                className="btn-ghost !py-2 !px-3 inline-flex items-center gap-2"
+                aria-label="Mi cuenta"
+              >
+                {me.avatarUrl ? (
+                  <Image
+                    src={me.avatarUrl}
+                    alt=""
+                    width={28}
+                    height={28}
+                    className="w-7 h-7 rounded-full object-cover"
+                  />
+                ) : (
+                  <span className="w-7 h-7 rounded-full bg-rose-100 grid place-items-center text-xs font-serif text-gold-600">
+                    {me.name.charAt(0).toUpperCase()}
+                  </span>
+                )}
+                <span className="text-sm">{me.name.split(' ')[0]}</span>
+              </button>
+              {menuOpen && (
+                <div className="absolute right-0 mt-2 w-56 card-soft !p-2 z-50 animate-in fade-in">
+                  <Link href="/cuenta" onClick={() => setMenuOpen(false)} className="block px-3 py-2 text-sm rounded-xl hover:bg-rose-100">Mi cuenta</Link>
+                  <Link href="/cuenta?tab=pedidos" onClick={() => setMenuOpen(false)} className="block px-3 py-2 text-sm rounded-xl hover:bg-rose-100">Mis pedidos</Link>
+                  <div className="h-px bg-rose-150 my-1" />
+                  <button onClick={logout} className="w-full text-left px-3 py-2 text-sm rounded-xl hover:bg-rose-100 text-rose-700">Cerrar sesión</button>
+                </div>
+              )}
+            </div>
+          )}
+
           <button
             className="md:hidden btn-ghost !p-2.5"
             onClick={() => setOpen((v) => !v)}
             aria-label="Menú"
           >
-            <BurgerIcon />
+            <MenuIcon />
           </button>
         </div>
       </div>
@@ -90,6 +169,31 @@ export default function Navbar() {
                 {n.label}
               </Link>
             ))}
+            {!me ? (
+              <Link
+                href="/cuenta/ingresar"
+                onClick={() => setOpen(false)}
+                className="py-3 text-sm uppercase tracking-widest text-gold-600 font-semibold"
+              >
+                Ingresar
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/cuenta"
+                  onClick={() => setOpen(false)}
+                  className="py-3 text-sm uppercase tracking-widest text-ink-700 border-b border-rose-150/60"
+                >
+                  Mi cuenta
+                </Link>
+                <button
+                  onClick={() => { setOpen(false); logout(); }}
+                  className="py-3 text-sm uppercase tracking-widest text-rose-700 text-left"
+                >
+                  Cerrar sesión
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -97,36 +201,3 @@ export default function Navbar() {
   );
 }
 
-function CartIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M6 6h15l-1.5 9h-12z" strokeLinejoin="round" />
-      <path d="M6 6L4 2H1" strokeLinecap="round" />
-      <circle cx="9" cy="20" r="1.5" />
-      <circle cx="18" cy="20" r="1.5" />
-    </svg>
-  );
-}
-function InstagramIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <rect x="2" y="2" width="20" height="20" rx="5" />
-      <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
-      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-function FacebookIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
-    </svg>
-  );
-}
-function BurgerIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M3 6h18M3 12h18M3 18h18" strokeLinecap="round" />
-    </svg>
-  );
-}

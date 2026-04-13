@@ -2,11 +2,11 @@
   "products": [
     {
       "id": "p_001",
-      "slug": "anillo-aurora-dorado",
+      "slug": "anillo-aurora",
       "name": "Anillo Aurora",
       "category": "anillos",
-      "description": "Anillo bañado en oro 18k con piedra zirconia talla brillante. Pieza minimalista, hipoalergénica y antimanchas, pensada para el uso diario sin perder elegancia. Acabado pulido espejo y aro confort que se adapta a cualquier dedo.",
-      "shortDescription": "Bañado en oro 18k · zirconia brillante",
+      "description": "Anillo con baño de rodio y piedra zirconia talla brillante. Pieza minimalista y antimanchas, pensada para el uso diario sin perder elegancia. Acabado pulido espejo y aro confort que se adapta a cualquier dedo.",
+      "shortDescription": "Baño de rodio · zirconia brillante",
       "priceCOP": 89000,
       "compareAtPriceCOP": 119000,
       "images": [
@@ -18,7 +18,7 @@
           "id": "p_001_t6",
           "label": "Talla 6",
           "sku": "AUR-6",
-          "stock": 8,
+          "stock": 7,
           "attributes": {
             "talla": "6"
           }
@@ -44,7 +44,7 @@
       ],
       "tags": [
         "bestseller",
-        "oro",
+        "rodio",
         "minimalista"
       ],
       "active": true,
@@ -56,8 +56,8 @@
       "slug": "collar-aura-luna",
       "name": "Collar Aura Luna",
       "category": "collares",
-      "description": "Collar de cadena delicada con dije de luna creciente. Plata 925 con baño dorado, antialérgico. Largo ajustable de 40 a 45 cm. Perfecto para superponer con otros collares.",
-      "shortDescription": "Plata 925 · dije luna · cadena ajustable",
+      "description": "Collar de cadena delicada con dije de luna creciente. Plata 925 con baño de rodio. Largo ajustable de 40 a 45 cm. Perfecto para superponer con otros collares.",
+      "shortDescription": "Plata 925 · baño de rodio · dije luna",
       "priceCOP": 119000,
       "compareAtPriceCOP": 149000,
       "images": [
@@ -87,8 +87,8 @@
       "slug": "aretes-divina-perla",
       "name": "Aretes Divina Perla",
       "category": "aretes",
-      "description": "Aretes con perla natural cultivada y base de acero quirúrgico bañada en oro. Cierre tipo presión seguro. Hipoalergénicos, ideales para piel sensible.",
-      "shortDescription": "Perla natural · acero quirúrgico dorado",
+      "description": "Aretes con perla natural cultivada y base de acero quirúrgico con baño de rodio. Cierre tipo presión seguro, ideales para uso diario.",
+      "shortDescription": "Perla natural · acero con baño de rodio",
       "priceCOP": 75000,
       "images": [
         "https://images.unsplash.com/photo-1535632066274-65bca041e2bd?w=900&q=80",
@@ -116,7 +116,7 @@
       "slug": "set-eterna-trio",
       "name": "Set Eterna",
       "category": "sets",
-      "description": "Set completo: collar + aretes + anillo bañados en oro 18k. Diseño coordinado en estilo minimalista, presentado en caja regalo Aura Divina. Ideal para regalo.",
+      "description": "Set completo: collar + aretes + anillo con baño de rodio. Diseño coordinado en estilo minimalista, presentado en caja regalo Aura Divina. Ideal para regalo.",
       "shortDescription": "Collar + aretes + anillo · caja regalo",
       "priceCOP": 219000,
       "compareAtPriceCOP": 289000,
@@ -167,8 +167,8 @@
       "slug": "pulsera-celeste-charms",
       "name": "Pulsera Celeste",
       "category": "pulseras",
-      "description": "Pulsera con cadena fina y tres charms (estrella, corazón y luna). Bañada en oro 14k. Cierre de mosquetón. Largo ajustable 16-19 cm.",
-      "shortDescription": "Cadena fina · 3 charms · oro 14k",
+      "description": "Pulsera con cadena fina y tres charms (estrella, corazón y luna). Con baño de rodio. Cierre de mosquetón. Largo ajustable 16-19 cm.",
+      "shortDescription": "Cadena fina · 3 charms · baño de rodio",
       "priceCOP": 95000,
       "images": [
         "https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=900&q=80"
@@ -231,11 +231,11 @@
     },
     {
       "id": "p_007",
-      "slug": "aretes-cascada-dorada",
+      "slug": "aretes-cascada",
       "name": "Aretes Cascada",
       "category": "aretes",
-      "description": "Aretes largos estilo cascada con cadena fina dorada. Movimiento elegante, perfectos para ocasiones especiales.",
-      "shortDescription": "Aretes largos cascada · oro 14k",
+      "description": "Aretes largos estilo cascada con cadena fina. Baño de rodio con acabado espejo. Movimiento elegante, perfectos para ocasiones especiales.",
+      "shortDescription": "Aretes largos cascada · baño de rodio",
       "priceCOP": 85000,
       "images": [
         "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=900&q=80"
@@ -262,8 +262,8 @@
       "slug": "collar-iniciales-divinas",
       "name": "Collar Iniciales",
       "category": "collares",
-      "description": "Collar personalizable con inicial. Letra dorada en cursiva, cadena delicada de 40-45 cm.",
-      "shortDescription": "Personalizable · inicial dorada",
+      "description": "Collar personalizable con inicial. Letra con baño de rodio en cursiva, cadena delicada de 40-45 cm.",
+      "shortDescription": "Personalizable · inicial rodio",
       "priceCOP": 99000,
       "images": [
         "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=900&q=80"
@@ -320,7 +320,7 @@
     {
       "id": "518d2ecb-ab17-4bae-81c0-076e8ea816b9",
       "code": "AD-4N9G77",
-      "status": "PENDING",
+      "status": "CONFIRMED_WHATSAPP",
       "items": [
         {
           "productId": "p_004",
@@ -349,7 +349,43 @@
       },
       "zoneId": "z_med_laureles",
       "createdAt": "2026-04-12T20:19:08.521Z",
-      "updatedAt": "2026-04-12T20:19:08.521Z"
+      "updatedAt": "2026-04-13T15:05:30.358Z",
+      "whatsappConfirmedAt": "2026-04-13T15:05:30.358Z"
+    },
+    {
+      "id": "00522de0-b22d-4ec0-9e0e-03f36ab8186a",
+      "code": "AD-XUTB4M",
+      "status": "CONFIRMED_WHATSAPP",
+      "items": [
+        {
+          "productId": "p_001",
+          "variantId": "p_001_t6",
+          "name": "Anillo Aurora",
+          "image": "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=900&q=80",
+          "unitPriceCOP": 89000,
+          "quantity": 1,
+          "subtotalCOP": 89000
+        }
+      ],
+      "subtotalCOP": 89000,
+      "shippingCOP": 10000,
+      "totalCOP": 99000,
+      "paymentMethod": "CASH_ON_DELIVERY",
+      "shipping": {
+        "fullName": "Deisy Molina",
+        "phone": "3187307977",
+        "email": "deisy.johana.molina@gmail.com",
+        "addressLine1": "CALLE 20 # 54 29",
+        "addressLine2": "",
+        "reference": "Apto 3135",
+        "notes": "favoe Entrega en horas de la tarde",
+        "city": "Itagüí",
+        "neighborhood": "Itagüí Centro"
+      },
+      "zoneId": "z_med_itagui",
+      "createdAt": "2026-04-13T01:05:00.668Z",
+      "updatedAt": "2026-04-13T14:35:09.054Z",
+      "whatsappConfirmedAt": "2026-04-13T14:35:09.054Z"
     }
   ],
   "coverageZones": [

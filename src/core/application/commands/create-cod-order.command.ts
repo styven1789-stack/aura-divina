@@ -25,4 +25,5 @@ export interface CreateCodOrderCommand {
     reference?: string;
     notes?: string;
   };
+  userId?: string;
 }

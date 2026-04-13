@@ -4,13 +4,14 @@
  * Floating WhatsApp action button — visible en todo el storefront.
  *
  * - Burbuja flotante esquina inferior derecha (mobile-first).
- * - Click → abre un mini-menú con dos acciones:
- *     1) "Quiero hacer un pedido"  → mensaje pre-llenado de pedido
- *     2) "Hablar con una asesora"  → mensaje pre-llenado de duda
+ * - Click → abre un mini-menú con dos acciones pre-llenadas.
  * - Animación pulse sutil + tooltip "¿Te ayudamos?" tras 4s.
+ * - Se **oculta en mobile** cuando el PDP activa la sticky buy bar
+ *   (detectado por `document.body.dataset.stickyBuy === '1'`).
  */
 
 import { useEffect, useState } from 'react';
+import { Close } from './icons';
 
 const ADMIN_WA = '573187307977';
 
@@ -26,6 +27,7 @@ function waLink(message: string) {
 export default function WhatsappFab() {
   const [open, setOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setShowTooltip(true), 4000);
@@ -33,8 +35,21 @@ export default function WhatsappFab() {
     return () => { clearTimeout(t); clearTimeout(t2); };
   }, []);
 
+  // Observa `document.body.dataset.stickyBuy` para esconder la FAB en PDP mobile.
+  useEffect(() => {
+    const update = () => setHidden(document.body.dataset.stickyBuy === '1');
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['data-sticky-buy'] });
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="fixed bottom-20 right-5 md:bottom-5 z-40 flex flex-col items-end gap-3">
+    <div
+      className={`fixed bottom-20 right-5 md:bottom-5 z-40 flex flex-col items-end gap-3 transition-opacity duration-200 ${
+        hidden ? 'md:opacity-100 opacity-0 pointer-events-none md:pointer-events-auto' : ''
+      }`}
+    >
       {/* Mini-menú de acciones */}
       {open && (
         <div className="animate-in fade-in slide-in-from-bottom-2 flex flex-col gap-2 mb-1">
@@ -121,9 +136,5 @@ function WhatsappIcon() {
 }
 
 function CloseIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
-      <path d="M6 6l12 12M6 18L18 6" />
-    </svg>
-  );
+  return <Close size={22} strokeWidth={2.5} className="text-white" />;
 }

@@ -122,6 +122,7 @@ export class CreateCashOnDeliveryOrderCommandHandler {
         paymentMethod: 'CASH_ON_DELIVERY',
         shipping: { ...cmd.shipping, phone: customerPhone.value },
         zoneId: zone.id,
+        userId: cmd.userId,
         createdAt: now,
         updatedAt: now,
       };

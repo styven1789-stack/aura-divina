@@ -47,6 +47,7 @@ export interface Order {
   paymentMethod: 'CASH_ON_DELIVERY';
   shipping: ShippingAddress;
   zoneId: string;
+  userId?: string;
   createdAt: string;
   updatedAt: string;
   whatsappConfirmedAt?: string;
@@ -67,3 +68,20 @@ export const ORDER_STATUS_COLOR: Record<OrderStatus, string> = {
   DELIVERED: 'bg-green-100 text-green-800 border-green-200',
   CANCELED: 'bg-rose-100 text-rose-800 border-rose-200',
 };
+
+const ORDER_STATUS_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
+  PENDING: ['CONFIRMED_WHATSAPP', 'CANCELED'],
+  CONFIRMED_WHATSAPP: ['SHIPPED', 'CANCELED'],
+  SHIPPED: ['DELIVERED'],
+  DELIVERED: [],
+  CANCELED: [],
+};
+
+export function canTransitionOrderStatus(from: OrderStatus, to: OrderStatus): boolean {
+  if (from === to) return true;
+  return ORDER_STATUS_TRANSITIONS[from].includes(to);
+}
+
+export function nextOrderStatuses(from: OrderStatus): OrderStatus[] {
+  return ORDER_STATUS_TRANSITIONS[from];
+}

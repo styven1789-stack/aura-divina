@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { loadDb } from '@/core/infrastructure/persistence/json-store';
 import { ORDER_STATUS_LABEL, type OrderStatus } from '@/core/domain/order';
@@ -90,8 +91,9 @@ export default async function TrackOrderPage({ params }: { params: Promise<{ cod
             {order.items.map((it, i) => (
               <div key={i} className="flex items-center gap-3 p-3 bg-white/70 rounded-2xl border border-rose-150">
                 {it.image && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={it.image} alt="" className="w-12 h-12 rounded-xl object-cover" />
+                  <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-rose-100 shrink-0">
+                    <Image src={it.image} alt="" fill sizes="48px" className="object-cover" />
+                  </div>
                 )}
                 <div className="flex-1">
                   <p className="text-sm font-medium text-ink-900">{it.name}</p>

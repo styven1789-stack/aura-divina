@@ -14,6 +14,7 @@ import path from 'node:path';
 import type { Product } from '@/core/domain/product';
 import type { Order } from '@/core/domain/order';
 import type { CoverageZone } from '@/core/domain/coverage-zone';
+import type { User } from '@/core/domain/user';
 
 export interface DbShape {
   products: Product[];
@@ -21,6 +22,7 @@ export interface DbShape {
   coverageZones: CoverageZone[];
   events: { type: string; occurredAt: string; payload: unknown }[];
   admins: { email: string; passwordHash: string }[];
+  users: User[];
 }
 
 const DB_PATH = path.join(process.cwd(), 'data', 'db.json');
@@ -33,9 +35,17 @@ export async function loadDb(): Promise<DbShape> {
   if (cache) return cache;
   try {
     const raw = await fs.readFile(DB_PATH, 'utf-8');
-    cache = JSON.parse(raw);
+    const parsed = JSON.parse(raw) as Partial<DbShape>;
+    cache = {
+      products: parsed.products ?? [],
+      orders: parsed.orders ?? [],
+      coverageZones: parsed.coverageZones ?? [],
+      events: parsed.events ?? [],
+      admins: parsed.admins ?? [],
+      users: parsed.users ?? [],
+    };
   } catch {
-    cache = { products: [], orders: [], coverageZones: [], events: [], admins: [] };
+    cache = { products: [], orders: [], coverageZones: [], events: [], admins: [], users: [] };
     await persist(cache!);
   }
   return cache!;

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { loadDb } from '@/core/infrastructure/persistence/json-store';
 import { createCodOrderHandler } from '@/core/infrastructure/container';
 import { DomainError } from '@/core/domain/errors';
-import { getAdminSession } from '@/lib/auth';
+import { getAdminSession, getUserSession } from '@/lib/auth';
 
 export async function GET() {
   const session = await getAdminSession();
@@ -15,7 +15,11 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const cmd = await req.json();
-    const result = await createCodOrderHandler.execute(cmd);
+    const userSession = await getUserSession();
+    const result = await createCodOrderHandler.execute({
+      ...cmd,
+      userId: userSession?.userId,
+    });
     return NextResponse.json(result, { status: 201 });
   } catch (err) {
     if (err instanceof DomainError) {

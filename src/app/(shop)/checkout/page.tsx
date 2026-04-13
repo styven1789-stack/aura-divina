@@ -2,10 +2,12 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/store/cart.store';
 import { formatCOP } from '@/lib/money';
 import { useToast } from '@/components/ui/Toast';
+import type { PublicUser, SavedAddress } from '@/core/domain/user';
 
 interface CoverageZone {
   id: string;
@@ -42,12 +44,54 @@ export default function CheckoutPage() {
   const [orderResult, setOrderResult] = useState<{ code: string; whatsappDeepLink: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const [user, setUser] = useState<PublicUser | null>(null);
+  const [selectedAddressId, setSelectedAddressId] = useState<string>('');
+  const [saveAddress, setSaveAddress] = useState(false);
+
   // Cargar zonas para selector inteligente
   useEffect(() => {
     fetch('/api/zones')
       .then((r) => r.json())
       .then((data) => setZones(data.zones ?? []));
   }, []);
+
+  // Cargar sesión del usuario y prefillar con dirección predeterminada si existe
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then((r) => r.json())
+      .then((data: { user: PublicUser | null }) => {
+        if (!data.user) return;
+        setUser(data.user);
+        const def = data.user.addresses.find((a) => a.isDefault) ?? data.user.addresses[0];
+        if (def) {
+          applyAddress(def);
+          setSelectedAddressId(def.id);
+        } else {
+          setForm((f) => ({
+            ...f,
+            fullName: data.user!.name,
+            phone: data.user!.phone ?? '',
+            email: data.user!.email,
+          }));
+        }
+      })
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const applyAddress = (a: SavedAddress) => {
+    setForm({
+      fullName: a.fullName,
+      phone: a.phone,
+      email: a.email ?? '',
+      addressLine1: a.addressLine1,
+      addressLine2: a.addressLine2 ?? '',
+      reference: a.reference ?? '',
+      notes: a.notes ?? '',
+    });
+    setCity(a.city);
+    setNeighborhood(a.neighborhood);
+  };
 
   const cityOptions = useMemo(() => Array.from(new Set(zones.map((z) => z.city))), [zones]);
   const neighborhoodOptions = useMemo(
@@ -106,6 +150,31 @@ export default function CheckoutPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message ?? 'Error al crear el pedido');
+
+      if (user && saveAddress) {
+        try {
+          await fetch('/api/account/addresses', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              label: 'Checkout',
+              fullName: form.fullName,
+              phone: form.phone,
+              email: form.email,
+              city,
+              neighborhood,
+              addressLine1: form.addressLine1,
+              addressLine2: form.addressLine2,
+              reference: form.reference,
+              notes: form.notes,
+              isDefault: user.addresses.length === 0,
+            }),
+          });
+        } catch {
+          // no bloquea el éxito del pedido
+        }
+      }
+
       setOrderResult({ code: data.order.code, whatsappDeepLink: data.whatsappDeepLink });
       clear();
       toast.success('¡Pedido recibido!', `Código ${data.order.code}`);
@@ -165,6 +234,38 @@ export default function CheckoutPage() {
       <h1 className="h-display text-4xl md:text-5xl text-ink-900 mb-2">Checkout</h1>
       <p className="text-ink-700/70 mb-8">Pago contraentrega · Solo completa los datos de envío.</p>
 
+      {user && user.addresses.length > 0 && (
+        <div className="card-soft p-5 mb-6 flex items-center gap-4 flex-wrap">
+          <label className="label-aura !mb-0">Usar dirección guardada</label>
+          <select
+            value={selectedAddressId}
+            onChange={(e) => {
+              const id = e.target.value;
+              setSelectedAddressId(id);
+              const a = user.addresses.find((x) => x.id === id);
+              if (a) applyAddress(a);
+            }}
+            className="input-aura flex-1 min-w-[14rem]"
+          >
+            <option value="">— Ingresar otra dirección —</option>
+            {user.addresses.map((a) => (
+              <option key={a.id} value={a.id}>
+                {a.label} · {a.addressLine1}, {a.neighborhood}
+                {a.isDefault ? ' (predeterminada)' : ''}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      {!user && (
+        <div className="card-soft p-4 mb-6 text-sm text-ink-700 flex flex-wrap gap-2 items-center">
+          <span>¿Ya tienes cuenta?</span>
+          <Link href={`/cuenta/ingresar?next=/checkout`} className="text-gold-600 font-semibold hover:underline">Ingresar</Link>
+          <span className="text-ink-600">para prefillar tus datos y ver pedidos anteriores.</span>
+        </div>
+      )}
+
       <form onSubmit={onSubmit} className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
           {/* Cobertura primero */}
@@ -216,6 +317,18 @@ export default function CheckoutPage() {
                 <Input label="Notas para el repartidor" value={form.notes} onChange={(v) => setForm({ ...form, notes: v })} />
               </div>
             </div>
+
+            {user && !selectedAddressId && (
+              <label className="mt-4 inline-flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={saveAddress}
+                  onChange={(e) => setSaveAddress(e.target.checked)}
+                  className="w-4 h-4 accent-gold-500"
+                />
+                <span className="text-sm text-ink-700">Guardar esta dirección en mi libreta</span>
+              </label>
+            )}
           </section>
 
           {error && <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-sm">{error}</div>}
@@ -227,8 +340,9 @@ export default function CheckoutPage() {
             {lines.map((l) => (
               <div key={l.productId + l.variantId} className="flex gap-3 items-center">
                 {l.image && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={l.image} alt="" className="w-14 h-14 rounded-xl object-cover" />
+                  <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-rose-100 shrink-0">
+                    <Image src={l.image} alt="" fill sizes="56px" className="object-cover" />
+                  </div>
                 )}
                 <div className="flex-1 text-sm">
                   <p className="text-ink-900">{l.name} <span className="text-ink-600">×{l.quantity}</span></p>

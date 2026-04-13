@@ -30,6 +30,21 @@ export class JsonOrderRepository implements OrderRepository {
   }
 
   /** /// <inheritdoc /> */
+  async findByUserId(userId: string): Promise<Order[]> {
+    return this.db.orders
+      .filter((o) => o.userId === userId)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  }
+
+  /** /// <inheritdoc /> */
+  async findUnclaimedByEmail(email: string): Promise<Order[]> {
+    const target = email.trim().toLowerCase();
+    return this.db.orders.filter(
+      (o) => !o.userId && (o.shipping.email ?? '').trim().toLowerCase() === target,
+    );
+  }
+
+  /** /// <inheritdoc /> */
   async updateStatus(id: string, status: OrderStatus): Promise<void> {
     const order = this.db.orders.find((o) => o.id === id);
     if (!order) return;

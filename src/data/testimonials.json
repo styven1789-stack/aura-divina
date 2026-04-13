@@ -1,0 +1,56 @@
+[
+  {
+    "id": "t_01",
+    "name": "Valentina R.",
+    "city": "Medellín",
+    "rating": 5,
+    "text": "El anillo llegó en menos de 24 horas y la caja es hermosísima. Se siente como un regalo de verdad, no un pedido en línea. Lo uso todos los días y no ha perdido el color.",
+    "product": "Anillo Aurora",
+    "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80"
+  },
+  {
+    "id": "t_02",
+    "name": "Mariana L.",
+    "city": "Envigado",
+    "rating": 5,
+    "text": "Soy alérgica a casi todo y este collar no me irrita. Por fin puedo usar una cadena delicada sin miedo. La atención por WhatsApp fue súper cálida.",
+    "product": "Collar Aura Luna",
+    "avatarUrl": "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=200&q=80"
+  },
+  {
+    "id": "t_03",
+    "name": "Camila D.",
+    "city": "Sabaneta",
+    "rating": 5,
+    "text": "Pedí el set Eterna como regalo para mi mamá y llegó impecable. La caja, la tarjeta, todo pensado con detalle. Mi mamá lloró al abrirlo. Gracias Aura ✨",
+    "product": "Set Eterna",
+    "avatarUrl": "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&q=80"
+  },
+  {
+    "id": "t_04",
+    "name": "Isabella M.",
+    "city": "Medellín",
+    "rating": 5,
+    "text": "Los aretes divina perla son mis favoritos, los uso tanto de día como de noche. No pesan nada y el brillo es hermoso. Ya voy por mi tercer pedido.",
+    "product": "Aretes Divina Perla",
+    "avatarUrl": "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=200&q=80"
+  },
+  {
+    "id": "t_05",
+    "name": "Luciana P.",
+    "city": "Itagüí",
+    "rating": 5,
+    "text": "Contraentrega en Itagüí en menos de un día. La repartidora llegó puntual y el producto superó mis expectativas. Se ve muchísimo más elegante que en las fotos.",
+    "product": "Pulsera Celeste",
+    "avatarUrl": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&q=80"
+  },
+  {
+    "id": "t_06",
+    "name": "Sofía A.",
+    "city": "Bello",
+    "rating": 5,
+    "text": "Compré varios regalos para mis amigas en diciembre y todas quedaron encantadas. La calidad es real, no es bisutería barata. Aura Divina se volvió mi marca de cabecera.",
+    "product": "Anillo Solitario Zen",
+    "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80"
+  }
+]

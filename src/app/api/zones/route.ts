@@ -25,6 +25,36 @@ export async function POST(req: Request) {
   return NextResponse.json({ zone }, { status: 201 });
 }
 
+export async function PATCH(req: Request) {
+  const session = await getAdminSession();
+  if (!session) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  const url = new URL(req.url);
+  const id = url.searchParams.get('id');
+  if (!id) return NextResponse.json({ message: 'id requerido' }, { status: 400 });
+  const body = (await req.json()) as Partial<CoverageZone>;
+
+  let notFound = false;
+  await withWriteLock(async (db) => {
+    const idx = db.coverageZones.findIndex((z) => z.id === id);
+    if (idx < 0) {
+      notFound = true;
+      return;
+    }
+    const current = db.coverageZones[idx];
+    db.coverageZones[idx] = {
+      ...current,
+      city: body.city ?? current.city,
+      neighborhood: body.neighborhood ?? current.neighborhood,
+      postalCodes: body.postalCodes ?? current.postalCodes,
+      shippingCOP: body.shippingCOP !== undefined ? Number(body.shippingCOP) : current.shippingCOP,
+      estimatedDelivery: body.estimatedDelivery ?? current.estimatedDelivery,
+      active: body.active !== undefined ? body.active : current.active,
+    };
+  });
+  if (notFound) return NextResponse.json({ message: 'Zona no encontrada' }, { status: 404 });
+  return NextResponse.json({ ok: true });
+}
+
 export async function DELETE(req: Request) {
   const session = await getAdminSession();
   if (!session) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });

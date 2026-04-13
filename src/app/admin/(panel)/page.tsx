@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { loadDb } from '@/core/infrastructure/persistence/json-store';
 import { formatCOP } from '@/lib/money';
 import { ORDER_STATUS_LABEL, ORDER_STATUS_COLOR, type Order } from '@/core/domain/order';
@@ -133,8 +134,9 @@ export default async function AdminDashboard() {
                 <li key={p.name} className="flex items-center gap-3">
                   <span className="grid place-items-center w-7 h-7 rounded-full bg-gold-500/15 text-gold-700 text-xs font-bold">{i + 1}</span>
                   {p.image && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={p.image} alt="" className="w-9 h-9 rounded-xl object-cover" />
+                    <div className="relative w-9 h-9 rounded-xl overflow-hidden bg-rose-100 shrink-0">
+                      <Image src={p.image} alt="" fill sizes="36px" className="object-cover" />
+                    </div>
                   )}
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-ink-900 truncate">{p.name}</p>

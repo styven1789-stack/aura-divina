@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import type { Product } from '@/core/domain/product';
 import { formatCOP } from '@/lib/money';
@@ -157,8 +158,16 @@ export default function ProductsAdmin({
                   return (
                     <tr key={p.id} className="border-t border-rose-150/60 hover:bg-rose-50/50">
                       <td className="px-4 py-3">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={p.images[0]} alt="" className="w-12 h-12 rounded-xl object-cover" />
+                        <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-rose-100">
+                          <Image
+                            src={p.images[0]}
+                            alt=""
+                            fill
+                            sizes="48px"
+                            unoptimized
+                            className="object-cover"
+                          />
+                        </div>
                       </td>
                       <td className="font-medium text-ink-900">
                         <div>{p.name}</div>
@@ -295,8 +304,16 @@ function ProductForm({
           </div>
           <Field label="Imagen URL"><input className="input-aura" value={form.images?.[0] ?? ''} onChange={(e) => setForm({ ...form, images: [e.target.value] })} /></Field>
           {form.images?.[0] && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={form.images[0]} alt="preview" className="w-32 h-32 rounded-2xl object-cover border border-rose-150" />
+            <div className="relative w-32 h-32 rounded-2xl overflow-hidden bg-rose-100 border border-rose-150">
+              <Image
+                src={form.images[0]}
+                alt="preview"
+                fill
+                sizes="128px"
+                unoptimized
+                className="object-cover"
+              />
+            </div>
           )}
           <div className="flex gap-6 pt-2">
             <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={!!form.active} onChange={(e) => setForm({ ...form, active: e.target.checked })} /> Activo</label>

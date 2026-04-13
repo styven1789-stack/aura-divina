@@ -44,3 +44,39 @@ export class InvalidPhoneException extends DomainError {
     super('INVALID_PHONE', 'El número de celular no es válido (debe iniciar con 3 y tener 10 dígitos).', 400);
   }
 }
+
+export class EmailAlreadyExistsException extends DomainError {
+  constructor(email: string) {
+    super('EMAIL_ALREADY_EXISTS', `Ya existe una cuenta con el correo "${email}". Inicia sesión o usa "Continuar con Google".`, 409);
+  }
+}
+
+export class InvalidCredentialsException extends DomainError {
+  constructor() {
+    super('INVALID_CREDENTIALS', 'Correo o contraseña incorrectos.', 401);
+  }
+}
+
+export class UserNotFoundException extends DomainError {
+  constructor() {
+    super('USER_NOT_FOUND', 'Usuario no encontrado.', 404);
+  }
+}
+
+export class AddressNotFoundException extends DomainError {
+  constructor() {
+    super('ADDRESS_NOT_FOUND', 'Dirección no encontrada.', 404);
+  }
+}
+
+export class WeakPasswordException extends DomainError {
+  constructor() {
+    super('WEAK_PASSWORD', 'La contraseña debe tener al menos 8 caracteres.', 400);
+  }
+}
+
+export class InvalidEmailException extends DomainError {
+  constructor() {
+    super('INVALID_EMAIL', 'El correo electrónico no es válido.', 400);
+  }
+}

@@ -1,46 +1,76 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Product } from '@/core/domain/product';
-import { formatCOP } from '@/lib/money';
+import PriceDisplay from '@/components/ui/PriceDisplay';
+import Badge from '@/components/ui/Badge';
+import StarRating from '@/components/trust/StarRating';
+import QuickAddButton from '@/components/product/QuickAddButton';
+import { totalStock, isSoldOut, isLowStock, getDiscountPercent } from '@/lib/product-helpers';
+import brandStats from '@/data/brand-stats.json';
 
 export default function ProductCard({ p }: { p: Product }) {
-  const discount = p.compareAtPriceCOP
-    ? Math.round((1 - p.priceCOP / p.compareAtPriceCOP) * 100)
-    : 0;
+  const soldOut = isSoldOut(p);
+  const lowStock = isLowStock(p, 5);
+  const total = totalStock(p);
+  const discount = getDiscountPercent(p.priceCOP, p.compareAtPriceCOP);
 
   return (
-    <Link
-      href={`/productos/${p.slug}`}
-      className="group block card-soft overflow-hidden transition hover:-translate-y-1 hover:shadow-gold"
+    <article
+      className={`group card-soft overflow-hidden transition duration-300 hover:-translate-y-1 hover:shadow-luxe ${soldOut ? 'opacity-85' : ''}`}
     >
-      <div className="relative aspect-square overflow-hidden bg-rose-100">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={p.images[0]}
-          alt={p.name}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-        />
-        {discount > 0 && (
-          <span className="absolute top-3 left-3 bg-gold-500 text-ink-900 text-[10px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full shadow">
-            -{discount}%
-          </span>
-        )}
-        {p.tags.includes('nuevo') && (
-          <span className="absolute top-3 right-3 bg-ink-900 text-rose-50 text-[10px] font-medium tracking-widest uppercase px-2.5 py-1 rounded-full">
-            Nuevo
-          </span>
-        )}
-      </div>
-      <div className="p-5">
-        <p className="text-[10px] uppercase tracking-widest2 text-gold-600 mb-1">{p.category}</p>
-        <h3 className="font-serif text-xl text-ink-900 leading-tight">{p.name}</h3>
-        <p className="text-xs text-ink-600 mt-1 line-clamp-2">{p.shortDescription}</p>
-        <div className="mt-4 flex items-baseline gap-2">
-          <span className="text-lg font-semibold text-ink-900">{formatCOP(p.priceCOP)}</span>
-          {p.compareAtPriceCOP && (
-            <span className="text-xs text-ink-600/60 line-through">{formatCOP(p.compareAtPriceCOP)}</span>
+      <Link
+        href={`/productos/${p.slug}`}
+        className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 rounded-3xl"
+        aria-label={`Ver detalles de ${p.name}`}
+      >
+        <div className="relative aspect-[4/5] overflow-hidden bg-rose-100">
+          <Image
+            src={p.images[0]}
+            alt={`${p.name} · Aura Divina`}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+
+          <div className="absolute top-3 left-3 flex flex-col gap-1.5 items-start">
+            {discount > 0 && <Badge variant="sale">-{discount}%</Badge>}
+          </div>
+          <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
+            {p.tags.includes('nuevo') && <Badge variant="new">Nuevo</Badge>}
+            {p.tags.includes('bestseller') && !p.tags.includes('nuevo') && (
+              <Badge variant="hot">Bestseller</Badge>
+            )}
+          </div>
+
+          {soldOut && (
+            <div className="absolute inset-0 grid place-items-center bg-ink-900/20">
+              <span className="bg-white/95 backdrop-blur rounded-full px-5 py-2 text-xs font-bold uppercase tracking-widest text-ink-900">
+                Agotado
+              </span>
+            </div>
+          )}
+          {!soldOut && lowStock && (
+            <div className="absolute bottom-3 right-3">
+              <Badge variant="low-stock">¡Últimas {total}!</Badge>
+            </div>
           )}
         </div>
+
+        <div className="px-5 pt-5 pb-3">
+          <p className="eyebrow mb-1">{p.category}</p>
+          <h3 className="font-serif text-xl text-ink-900 leading-tight">{p.name}</h3>
+          <p className="text-xs text-ink-600 mt-1 line-clamp-2">{p.shortDescription}</p>
+          <div className="mt-3">
+            <StarRating rating={brandStats.averageRating} count={brandStats.reviewCount} size="sm" showCount />
+          </div>
+          <div className="mt-3">
+            <PriceDisplay price={p.priceCOP} compareAt={p.compareAtPriceCOP} size="md" />
+          </div>
+        </div>
+      </Link>
+      <div className="px-5 pb-5">
+        <QuickAddButton product={p} />
       </div>
-    </Link>
+    </article>
   );
 }
