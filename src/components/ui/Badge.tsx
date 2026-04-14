@@ -23,6 +23,6 @@ export default function Badge({ variant = 'neutral', children, className = '' }:
   const base =
     variant === 'sale'
       ? VARIANT_CLASS[variant]
-      : `inline-flex items-center gap-1 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-widest ${VARIANT_CLASS[variant]}`;
+      : `inline-flex items-center gap-1 rounded-full px-3 py-1 text-fluid-xs font-semibold uppercase tracking-widest ${VARIANT_CLASS[variant]}`;
   return <span className={`${base} ${className}`}>{children}</span>;
 }

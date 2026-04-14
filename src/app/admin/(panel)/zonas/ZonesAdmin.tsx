@@ -144,22 +144,22 @@ export default function ZonesAdmin({ initial }: { initial: CoverageZone[] }) {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between mb-6 md:mb-8 gap-3">
         <div>
-          <h1 className="h-display text-4xl text-ink-900">Zonas de cobertura</h1>
-          <p className="text-ink-700/70 mt-1">{zones.length} zonas configuradas para contraentrega</p>
+          <h1 className="h-display text-fluid-4xl text-ink-900">Zonas de cobertura</h1>
+          <p className="text-ink-700/70 mt-1 text-fluid-sm">{zones.length} zonas configuradas para contraentrega</p>
         </div>
-        <button onClick={() => (formVisible ? closeForm() : openCreate())} className="btn-gold">
+        <button onClick={() => (formVisible ? closeForm() : openCreate())} className="btn-gold w-full xs:w-auto">
           {formVisible ? 'Cerrar' : '+ Nueva zona'}
         </button>
       </div>
 
       {formVisible && (
-        <div className="card-soft p-6 mb-6">
-          <h2 className="font-serif text-2xl mb-4">
+        <div className="card-soft p-5 sm:p-6 mb-6">
+          <h2 className="font-serif text-fluid-2xl mb-4">
             {editing ? `Editar zona · ${editing.neighborhood}` : 'Nueva zona de cobertura'}
           </h2>
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Ciudad">
               <input
                 className="input-aura"
@@ -177,6 +177,9 @@ export default function ZonesAdmin({ initial }: { initial: CoverageZone[] }) {
             <Field label="Costo envío (COP)">
               <input
                 type="number"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                min="0"
                 className="input-aura"
                 value={form.shippingCOP ?? 0}
                 onChange={(e) => setForm({ ...form, shippingCOP: Number(e.target.value) })}
@@ -197,13 +200,13 @@ export default function ZonesAdmin({ initial }: { initial: CoverageZone[] }) {
                   onChange={(e) => setForm({ ...form, active: e.target.checked })}
                   className="w-4 h-4 accent-gold-500"
                 />
-                <span className="text-sm text-ink-700">
+                <span className="text-fluid-sm text-ink-700">
                   {form.active ? 'Activa (visible en checkout)' : 'Inactiva (oculta del checkout)'}
                 </span>
               </label>
             </Field>
           </div>
-          <div className="flex gap-3 mt-6">
+          <div className="flex flex-col-reverse xs:flex-row gap-3 mt-6">
             <button onClick={closeForm} className="btn-ghost flex-1">
               Cancelar
             </button>
@@ -214,56 +217,100 @@ export default function ZonesAdmin({ initial }: { initial: CoverageZone[] }) {
         </div>
       )}
 
-      <div className="card-soft overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-rose-100/50 text-left text-[10px] uppercase tracking-widest2 text-ink-700">
-            <tr>
-              <th className="px-4 py-3">Ciudad</th>
-              <th>Barrio</th>
-              <th>Envío</th>
-              <th>Tiempo</th>
-              <th>Estado</th>
-              <th className="text-right pr-4">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {zones.map((z) => (
-              <tr key={z.id} className="border-t border-rose-150/60 hover:bg-rose-50/50">
-                <td className="px-4 py-3">{z.city}</td>
-                <td className="font-medium text-ink-900">{z.neighborhood}</td>
-                <td>{formatCOP(z.shippingCOP)}</td>
-                <td>{z.estimatedDelivery}</td>
-                <td>
-                  <button
-                    onClick={() => setPendingToggle(z)}
-                    title={z.active ? 'Click para desactivar' : 'Click para activar'}
-                    className={`text-[10px] uppercase tracking-widest px-3 py-1 rounded-full border transition ${
-                      z.active
-                        ? 'bg-emerald-100 text-emerald-800 border-emerald-200 hover:bg-emerald-200'
-                        : 'bg-rose-100 text-rose-700 border-rose-200 hover:bg-rose-200 opacity-80'
-                    }`}
-                  >
-                    {z.active ? 'Activa' : 'Inactiva'}
-                  </button>
-                </td>
-                <td className="text-right pr-4 whitespace-nowrap">
-                  <button
-                    onClick={() => openEdit(z)}
-                    className="text-xs uppercase tracking-widest text-gold-600 hover:text-gold-700 mr-4"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => setConfirmDelete(z)}
-                    className="text-xs uppercase tracking-widest text-rose-600 hover:text-rose-700"
-                  >
-                    Borrar
-                  </button>
-                </td>
+      {/* Card view móvil */}
+      <ul className="md:hidden grid gap-3">
+        {zones.map((z) => (
+          <li key={z.id} className="card-soft p-4 grid grid-cols-[1fr_auto] gap-x-3 gap-y-1.5 items-center">
+            <div className="min-w-0">
+              <p className="font-medium text-ink-900">{z.neighborhood}</p>
+              <p className="text-fluid-xs text-ink-600">{z.city}</p>
+            </div>
+            <button
+              onClick={() => setPendingToggle(z)}
+              title={z.active ? 'Click para desactivar' : 'Click para activar'}
+              className={`text-fluid-xs uppercase tracking-widest px-3 py-1.5 rounded-full border transition tap-target ${
+                z.active
+                  ? 'bg-emerald-100 text-emerald-800 border-emerald-200 hover:bg-emerald-200'
+                  : 'bg-rose-100 text-rose-700 border-rose-200 hover:bg-rose-200 opacity-80'
+              }`}
+            >
+              {z.active ? 'Activa' : 'Inactiva'}
+            </button>
+            <div className="col-span-2 flex flex-wrap gap-2 text-fluid-xs">
+              <span className="chip">{formatCOP(z.shippingCOP)}</span>
+              <span className="chip">{z.estimatedDelivery}</span>
+            </div>
+            <div className="col-span-2 flex gap-3 mt-1">
+              <button
+                onClick={() => openEdit(z)}
+                className="text-fluid-xs uppercase tracking-widest text-gold-600 hover:text-gold-700 py-2"
+              >
+                Editar
+              </button>
+              <button
+                onClick={() => setConfirmDelete(z)}
+                className="text-fluid-xs uppercase tracking-widest text-rose-600 hover:text-rose-700 py-2"
+              >
+                Borrar
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      {/* Tabla md+ */}
+      <div className="hidden md:block card-soft overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-fluid-sm min-w-[640px]">
+            <thead className="bg-rose-100/50 text-left text-fluid-xs uppercase tracking-widest2 text-ink-700">
+              <tr>
+                <th className="px-4 py-3">Ciudad</th>
+                <th>Barrio</th>
+                <th>Envío</th>
+                <th>Tiempo</th>
+                <th>Estado</th>
+                <th className="text-right pr-4">Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {zones.map((z) => (
+                <tr key={z.id} className="border-t border-rose-150/60 hover:bg-rose-50/50">
+                  <td className="px-4 py-3">{z.city}</td>
+                  <td className="font-medium text-ink-900">{z.neighborhood}</td>
+                  <td>{formatCOP(z.shippingCOP)}</td>
+                  <td>{z.estimatedDelivery}</td>
+                  <td>
+                    <button
+                      onClick={() => setPendingToggle(z)}
+                      title={z.active ? 'Click para desactivar' : 'Click para activar'}
+                      className={`text-fluid-xs uppercase tracking-widest px-3 py-1.5 rounded-full border transition ${
+                        z.active
+                          ? 'bg-emerald-100 text-emerald-800 border-emerald-200 hover:bg-emerald-200'
+                          : 'bg-rose-100 text-rose-700 border-rose-200 hover:bg-rose-200 opacity-80'
+                      }`}
+                    >
+                      {z.active ? 'Activa' : 'Inactiva'}
+                    </button>
+                  </td>
+                  <td className="text-right pr-4 whitespace-nowrap">
+                    <button
+                      onClick={() => openEdit(z)}
+                      className="text-fluid-xs uppercase tracking-widest text-gold-600 hover:text-gold-700 mr-4"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => setConfirmDelete(z)}
+                      className="text-fluid-xs uppercase tracking-widest text-rose-600 hover:text-rose-700"
+                    >
+                      Borrar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <ConfirmModal

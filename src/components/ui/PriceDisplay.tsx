@@ -17,9 +17,9 @@ interface PriceDisplayProps {
 }
 
 const SIZE_CLASS: Record<Size, { primary: string; compare: string }> = {
-  sm: { primary: 'text-sm font-semibold', compare: 'text-xs' },
-  md: { primary: 'font-serif text-xl text-ink-900', compare: 'text-xs' },
-  lg: { primary: 'font-serif text-3xl text-ink-900', compare: 'text-base' },
+  sm: { primary: 'text-fluid-sm font-semibold', compare: 'text-fluid-xs' },
+  md: { primary: 'font-serif text-fluid-xl text-ink-900', compare: 'text-fluid-xs' },
+  lg: { primary: 'font-serif text-fluid-3xl text-ink-900', compare: 'text-fluid-base' },
 };
 
 export default function PriceDisplay({
@@ -38,7 +38,7 @@ export default function PriceDisplay({
         <>
           <span className={`${cls.compare} text-ink-600/60 line-through`}>{formatCOP(compareAt)}</span>
           {showDiscount && discount > 0 && (
-            <span className="text-[10px] font-bold uppercase tracking-widest text-gold-700">
+            <span className="text-fluid-xs font-bold uppercase tracking-widest text-gold-700">
               -{discount}%
             </span>
           )}

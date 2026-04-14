@@ -10,6 +10,8 @@ import Image from 'next/image';
 import IconButton from './IconButton';
 import { ChevronLeft, ChevronRight, Close } from '@/components/icons';
 
+const SWIPE_THRESHOLD = 50;
+
 interface LightboxProps {
   open: boolean;
   images: string[];
@@ -30,6 +32,7 @@ export default function Lightbox({
   const rootRef = useRef<HTMLDivElement | null>(null);
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
   const lastFocusedRef = useRef<HTMLElement | null>(null);
+  const touchStartXRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -79,13 +82,31 @@ export default function Lightbox({
   const prev = () => onIndexChange((activeIndex - 1 + images.length) % images.length);
   const next = () => onIndexChange((activeIndex + 1) % images.length);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length > 1) {
+      touchStartXRef.current = null;
+      return;
+    }
+    touchStartXRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null || images.length < 2) return;
+    const delta = e.changedTouches[0].clientX - touchStartXRef.current;
+    touchStartXRef.current = null;
+    if (Math.abs(delta) > SWIPE_THRESHOLD) {
+      if (delta < 0) next();
+      else prev();
+    }
+  };
+
   return (
     <div
       ref={rootRef}
       role="dialog"
       aria-modal="true"
       aria-label="Vista ampliada"
-      className="fixed inset-0 z-[95] bg-ink-900/92 backdrop-blur-md grid place-items-center p-4 animate-in fade-in"
+      className="fixed inset-0 z-[95] bg-ink-900/92 backdrop-blur-md grid place-items-center p-2 sm:p-4 safe-pt safe-pb animate-in fade-in"
       onClick={onClose}
     >
       <div className="absolute top-4 right-4">
@@ -111,21 +132,25 @@ export default function Lightbox({
       )}
 
       <div
-        className="relative w-full max-w-5xl aspect-[4/5] md:aspect-[3/4]"
+        className="relative w-full max-w-5xl h-full max-h-[calc(100dvh-6rem)]"
+        style={{ touchAction: 'pinch-zoom' }}
         onClick={(e) => e.stopPropagation()}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         <Image
           src={images[activeIndex]}
           alt={alt}
           fill
           sizes="100vw"
-          className="object-contain"
+          className="object-contain select-none"
           priority
+          draggable={false}
         />
       </div>
 
       {images.length > 1 && (
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70 text-xs uppercase tracking-widest">
+        <div className="absolute bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 text-white/70 text-fluid-xs uppercase tracking-widest">
           {activeIndex + 1} / {images.length}
         </div>
       )}

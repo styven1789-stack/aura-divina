@@ -22,9 +22,9 @@ interface TestimonialCardProps {
 
 export default function TestimonialCard({ testimonial, className = '' }: TestimonialCardProps) {
   return (
-    <article className={`card-luxe p-7 flex flex-col h-full ${className}`}>
+    <article className={`card-luxe p-5 sm:p-7 flex flex-col h-full ${className}`}>
       <StarRating rating={testimonial.rating} size="md" />
-      <blockquote className="mt-4 font-serif italic text-lg text-ink-800 leading-relaxed flex-1">
+      <blockquote className="mt-4 font-serif italic text-fluid-lg text-ink-800 leading-relaxed flex-1">
         “{testimonial.text}”
       </blockquote>
       <div className="mt-5 flex items-center gap-3 pt-5 border-t border-rose-150">
@@ -42,8 +42,8 @@ export default function TestimonialCard({ testimonial, className = '' }: Testimo
           </div>
         )}
         <div>
-          <p className="text-sm font-semibold text-ink-900">{testimonial.name}</p>
-          <p className="text-[11px] text-ink-600">
+          <p className="text-fluid-sm font-semibold text-ink-900">{testimonial.name}</p>
+          <p className="text-fluid-xs text-ink-600">
             {testimonial.city}
             {testimonial.product ? ` · ${testimonial.product}` : ''}
           </p>

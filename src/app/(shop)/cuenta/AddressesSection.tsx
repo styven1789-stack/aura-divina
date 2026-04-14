@@ -118,44 +118,44 @@ export default function AddressesSection({ user, onChange }: { user: PublicUser;
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
-        <p className="text-ink-700/70 text-sm">{user.addresses.length} direcciones guardadas</p>
-        <button onClick={() => (formVisible ? closeForm() : openCreate())} className="btn-gold">
+      <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between gap-3 mb-4">
+        <p className="text-ink-700/70 text-fluid-sm">{user.addresses.length} direcciones guardadas</p>
+        <button onClick={() => (formVisible ? closeForm() : openCreate())} className="btn-gold w-full xs:w-auto">
           {formVisible ? 'Cerrar' : '+ Nueva dirección'}
         </button>
       </div>
 
       {formVisible && (
-        <div className="card-soft p-6 mb-6">
-          <h3 className="font-serif text-xl mb-4">
+        <div className="card-soft p-5 sm:p-6 mb-6">
+          <h3 className="font-serif text-fluid-xl mb-4">
             {editingId ? 'Editar dirección' : 'Nueva dirección'}
           </h3>
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Etiqueta">
-              <input value={form.label} onChange={(e) => setForm({ ...form, label: e.target.value })} className="input-aura" placeholder="Casa, Oficina…" />
+              <input value={form.label} onChange={(e) => setForm({ ...form, label: e.target.value })} className="input-aura" placeholder="Casa, Oficina…" autoCapitalize="words" />
             </Field>
             <Field label="Nombre del destinatario">
-              <input value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} className="input-aura" />
+              <input value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} className="input-aura" autoComplete="name" autoCapitalize="words" />
             </Field>
             <Field label="Celular">
-              <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="input-aura" placeholder="3XXXXXXXXX" />
+              <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="input-aura" placeholder="3XXXXXXXXX" type="tel" inputMode="tel" autoComplete="tel" pattern="[0-9]{10}" />
             </Field>
             <Field label="Correo (opcional)">
-              <input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="input-aura" type="email" />
+              <input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="input-aura" type="email" inputMode="email" autoComplete="email" autoCapitalize="off" spellCheck={false} />
             </Field>
             <Field label="Ciudad">
-              <input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className="input-aura" />
+              <input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className="input-aura" autoComplete="address-level2" />
             </Field>
             <Field label="Barrio / Sector">
-              <input value={form.neighborhood} onChange={(e) => setForm({ ...form, neighborhood: e.target.value })} className="input-aura" />
+              <input value={form.neighborhood} onChange={(e) => setForm({ ...form, neighborhood: e.target.value })} className="input-aura" autoComplete="address-level3" />
             </Field>
             <div className="sm:col-span-2">
               <Field label="Dirección">
-                <input value={form.addressLine1} onChange={(e) => setForm({ ...form, addressLine1: e.target.value })} className="input-aura" placeholder="Cra 43A # 5 - 50" />
+                <input value={form.addressLine1} onChange={(e) => setForm({ ...form, addressLine1: e.target.value })} className="input-aura" placeholder="Cra 43A # 5 - 50" autoComplete="address-line1" />
               </Field>
             </div>
             <Field label="Referencia">
-              <input value={form.reference} onChange={(e) => setForm({ ...form, reference: e.target.value })} className="input-aura" placeholder="Torre, apto, color…" />
+              <input value={form.reference} onChange={(e) => setForm({ ...form, reference: e.target.value })} className="input-aura" placeholder="Torre, apto, color…" autoComplete="address-line2" />
             </Field>
             <Field label="Notas para el repartidor">
               <input value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="input-aura" />
@@ -163,11 +163,11 @@ export default function AddressesSection({ user, onChange }: { user: PublicUser;
             <div className="sm:col-span-2">
               <label className="inline-flex items-center gap-3 cursor-pointer">
                 <input type="checkbox" checked={!!form.isDefault} onChange={(e) => setForm({ ...form, isDefault: e.target.checked })} className="w-4 h-4 accent-gold-500" />
-                <span className="text-sm text-ink-700">Usar como dirección predeterminada</span>
+                <span className="text-fluid-sm text-ink-700">Usar como dirección predeterminada</span>
               </label>
             </div>
           </div>
-          <div className="flex gap-3 mt-6">
+          <div className="flex flex-col-reverse xs:flex-row gap-3 mt-6">
             <button onClick={closeForm} className="btn-ghost flex-1">Cancelar</button>
             <button onClick={save} className="btn-gold flex-1">{editingId ? 'Guardar cambios' : 'Guardar dirección'}</button>
           </div>
@@ -179,35 +179,35 @@ export default function AddressesSection({ user, onChange }: { user: PublicUser;
           Aún no tienes direcciones guardadas. Crea una para agilizar el checkout.
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
           {user.addresses.map((a) => (
             <div key={a.id} className="card-soft p-5 flex flex-col">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-xs uppercase tracking-widest2 text-gold-600">{a.label}</p>
-                  <p className="font-serif text-lg text-ink-900">{a.fullName}</p>
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-fluid-xs uppercase tracking-widest2 text-gold-600">{a.label}</p>
+                  <p className="font-serif text-fluid-lg text-ink-900 truncate">{a.fullName}</p>
                 </div>
                 {a.isDefault && (
-                  <span className="text-[10px] uppercase tracking-widest px-2 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  <span className="text-fluid-xs uppercase tracking-widest px-2 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0">
                     Predeterminada
                   </span>
                 )}
               </div>
-              <p className="text-sm text-ink-700 mt-2">{a.addressLine1}</p>
-              <p className="text-sm text-ink-700">{a.neighborhood}, {a.city}</p>
-              {a.reference && <p className="text-xs text-ink-600 mt-1">Ref: {a.reference}</p>}
-              <p className="text-xs text-ink-600 mt-1 font-mono">{a.phone}</p>
+              <p className="text-fluid-sm text-ink-700 mt-2">{a.addressLine1}</p>
+              <p className="text-fluid-sm text-ink-700">{a.neighborhood}, {a.city}</p>
+              {a.reference && <p className="text-fluid-xs text-ink-600 mt-1">Ref: {a.reference}</p>}
+              <p className="text-fluid-xs text-ink-600 mt-1 font-mono">{a.phone}</p>
 
               <div className="flex gap-2 mt-4 flex-wrap">
                 {!a.isDefault && (
-                  <button onClick={() => setDefault(a)} className="text-[10px] uppercase tracking-widest text-gold-600 hover:text-gold-700">
+                  <button onClick={() => setDefault(a)} className="text-fluid-xs uppercase tracking-widest text-gold-600 hover:text-gold-700 py-2">
                     Marcar predeterminada
                   </button>
                 )}
-                <button onClick={() => openEdit(a)} className="text-[10px] uppercase tracking-widest text-ink-700 hover:text-gold-600">
+                <button onClick={() => openEdit(a)} className="text-fluid-xs uppercase tracking-widest text-ink-700 hover:text-gold-600 py-2">
                   Editar
                 </button>
-                <button onClick={() => setConfirmDelete(a)} className="text-[10px] uppercase tracking-widest text-rose-600 hover:text-rose-700">
+                <button onClick={() => setConfirmDelete(a)} className="text-fluid-xs uppercase tracking-widest text-rose-600 hover:text-rose-700 py-2">
                   Eliminar
                 </button>
               </div>

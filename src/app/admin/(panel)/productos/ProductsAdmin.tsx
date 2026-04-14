@@ -100,12 +100,12 @@ export default function ProductsAdmin({
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+      <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between mb-4 md:mb-6 gap-3">
         <div>
-          <h1 className="h-display text-4xl text-ink-900">Productos</h1>
-          <p className="text-ink-700/70 mt-1 text-sm">{counts.all} productos · {counts.active} activos · {counts.lowStock} con stock bajo</p>
+          <h1 className="h-display text-fluid-4xl text-ink-900">Productos</h1>
+          <p className="text-ink-700/70 mt-1 text-fluid-sm">{counts.all} productos · {counts.active} activos · {counts.lowStock} con stock bajo</p>
         </div>
-        <button onClick={() => setCreating(true)} className="btn-gold">+ Nuevo producto</button>
+        <button onClick={() => setCreating(true)} className="btn-gold w-full xs:w-auto">+ Nuevo producto</button>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
@@ -115,6 +115,9 @@ export default function ProductsAdmin({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por nombre, categoría o slug…"
+            autoCapitalize="off"
+            autoComplete="off"
+            spellCheck={false}
             className="input-aura !pl-11"
           />
           <span className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-600">
@@ -123,7 +126,7 @@ export default function ProductsAdmin({
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex overflow-x-auto scrollbar-none gap-2 mb-4 md:mb-6 -mx-4 px-4 snap-x snap-mandatory sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible">
         <Chip active={filter === 'all'} onClick={() => setFilter('all')}>Todos · {counts.all}</Chip>
         <Chip active={filter === 'active'} onClick={() => setFilter('active')}>Activos · {counts.active}</Chip>
         <Chip active={filter === 'inactive'} onClick={() => setFilter('inactive')}>Inactivos · {counts.inactive}</Chip>
@@ -137,66 +140,102 @@ export default function ProductsAdmin({
           <button onClick={() => { setSearch(''); setFilter('all'); }} className="btn-ghost mt-4">Limpiar filtros</button>
         </div>
       ) : (
-        <div className="card-soft overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-rose-100/50 text-left text-[10px] uppercase tracking-widest2 text-ink-700">
-                <tr>
-                  <th className="px-4 py-3">Imagen</th>
-                  <th>Nombre</th>
-                  <th>Categoría</th>
-                  <th>Precio</th>
-                  <th>Stock total</th>
-                  <th>Estado</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((p) => {
-                  const stock = p.variants.reduce((s, v) => s + v.stock, 0);
-                  const low = stock < 5;
-                  return (
-                    <tr key={p.id} className="border-t border-rose-150/60 hover:bg-rose-50/50">
-                      <td className="px-4 py-3">
-                        <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-rose-100">
-                          <Image
-                            src={p.images[0]}
-                            alt=""
-                            fill
-                            sizes="48px"
-                            unoptimized
-                            className="object-cover"
-                          />
-                        </div>
-                      </td>
-                      <td className="font-medium text-ink-900">
-                        <div>{p.name}</div>
-                        <div className="text-[11px] text-ink-600 font-mono">{p.slug}</div>
-                      </td>
-                      <td className="capitalize">{p.category}</td>
-                      <td>{formatCOP(p.priceCOP)}</td>
-                      <td>
-                        <span className={low ? 'text-amber-700 font-semibold' : ''}>
-                          {stock}
-                          {low && <span className="ml-1.5 text-[10px] uppercase">⚠</span>}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={`chip ${p.active ? '' : 'opacity-50'}`}>
-                          {p.active ? 'Activo' : 'Inactivo'}
-                        </span>
-                      </td>
-                      <td className="text-right pr-4 py-3 space-x-3 whitespace-nowrap">
-                        <button onClick={() => setEditing(p)} className="text-xs uppercase tracking-widest text-gold-600 hover:text-gold-700">Editar</button>
-                        <button onClick={() => setConfirmDelete(p)} className="text-xs uppercase tracking-widest text-rose-600 hover:text-rose-700">Borrar</button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+        <>
+          {/* Card view móvil */}
+          <ul className="md:hidden grid gap-3">
+            {filtered.map((p) => {
+              const stock = p.variants.reduce((s, v) => s + v.stock, 0);
+              const low = stock < 5;
+              return (
+                <li key={p.id} className="card-soft p-4 flex gap-3">
+                  <div className="relative w-16 h-16 rounded-2xl overflow-hidden bg-rose-100 shrink-0">
+                    <Image src={p.images[0]} alt="" fill sizes="64px" unoptimized className="object-cover" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-ink-900 truncate">{p.name}</p>
+                    <p className="text-fluid-xs text-ink-600 font-mono truncate">{p.slug}</p>
+                    <div className="mt-2 flex flex-wrap gap-1.5 text-fluid-xs">
+                      <span className="chip capitalize">{p.category}</span>
+                      <span className="chip">{formatCOP(p.priceCOP)}</span>
+                      <span className={`chip ${low ? 'text-amber-700 font-semibold' : ''}`}>
+                        Stock {stock}{low && ' ⚠'}
+                      </span>
+                      <span className={`chip ${p.active ? '' : 'opacity-50'}`}>
+                        {p.active ? 'Activo' : 'Inactivo'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2 shrink-0">
+                    <button onClick={() => setEditing(p)} className="btn-ghost !py-2 !px-3 text-fluid-xs">Editar</button>
+                    <button onClick={() => setConfirmDelete(p)} className="text-fluid-xs text-rose-600 py-2 uppercase tracking-widest">Borrar</button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* Tabla md+ */}
+          <div className="hidden md:block card-soft overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-fluid-sm min-w-[720px]">
+                <thead className="bg-rose-100/50 text-left text-fluid-xs uppercase tracking-widest2 text-ink-700">
+                  <tr>
+                    <th className="px-4 py-3 sticky left-0 bg-rose-100/95 z-10">Imagen</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Stock total</th>
+                    <th>Estado</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filtered.map((p) => {
+                    const stock = p.variants.reduce((s, v) => s + v.stock, 0);
+                    const low = stock < 5;
+                    return (
+                      <tr key={p.id} className="border-t border-rose-150/60 hover:bg-rose-50/50 group">
+                        <td className="px-4 py-3 sticky left-0 bg-white z-10 group-hover:bg-rose-50/95">
+                          <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-rose-100">
+                            <Image
+                              src={p.images[0]}
+                              alt=""
+                              fill
+                              sizes="48px"
+                              unoptimized
+                              className="object-cover"
+                            />
+                          </div>
+                        </td>
+                        <td className="font-medium text-ink-900">
+                          <div>{p.name}</div>
+                          <div className="text-fluid-xs text-ink-600 font-mono">{p.slug}</div>
+                        </td>
+                        <td className="capitalize">{p.category}</td>
+                        <td>{formatCOP(p.priceCOP)}</td>
+                        <td>
+                          <span className={low ? 'text-amber-700 font-semibold' : ''}>
+                            {stock}
+                            {low && <span className="ml-1.5 text-fluid-xs uppercase">⚠</span>}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={`chip ${p.active ? '' : 'opacity-50'}`}>
+                            {p.active ? 'Activo' : 'Inactivo'}
+                          </span>
+                        </td>
+                        <td className="text-right pr-4 py-3 space-x-3 whitespace-nowrap">
+                          <button onClick={() => setEditing(p)} className="text-fluid-xs uppercase tracking-widest text-gold-600 hover:text-gold-700">Editar</button>
+                          <button onClick={() => setConfirmDelete(p)} className="text-fluid-xs uppercase tracking-widest text-rose-600 hover:text-rose-700">Borrar</button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        </>
       )}
 
       {(editing || creating) && (
@@ -273,16 +312,16 @@ function ProductForm({
 
   return (
     <div
-      className="fixed inset-0 z-[80] bg-ink-900/60 backdrop-blur-sm grid place-items-center p-4 animate-in fade-in"
+      className="fixed inset-0 z-[80] bg-ink-900/60 backdrop-blur-sm grid place-items-center p-0 md:p-4 animate-in fade-in"
       onClick={onClose}
     >
       <div
-        className="bg-rose-50 rounded-3xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in zoom-in-95"
+        className="bg-rose-50 rounded-none md:rounded-3xl p-6 sm:p-8 w-full max-w-2xl max-h-[100dvh] md:max-h-[90vh] h-[100dvh] md:h-auto overflow-y-auto animate-in zoom-in-95"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-start justify-between mb-6">
-          <h2 className="font-serif text-2xl text-ink-900">{initial ? 'Editar producto' : 'Nuevo producto'}</h2>
-          <button onClick={onClose} className="btn-ghost !py-2 !px-4">×</button>
+        <div className="flex items-start justify-between mb-6 sticky top-0 bg-rose-50/95 backdrop-blur -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 px-6 sm:px-8 pt-6 sm:pt-8 pb-3 z-10">
+          <h2 className="font-serif text-fluid-2xl text-ink-900">{initial ? 'Editar producto' : 'Nuevo producto'}</h2>
+          <button onClick={onClose} aria-label="Cerrar" className="btn-ghost !py-2 !px-4 tap-target">×</button>
         </div>
         <div className="space-y-4">
           <Field label="Nombre"><input className="input-aura" value={form.name ?? ''} onChange={(e) => setForm({ ...form, name: e.target.value })} /></Field>
@@ -298,9 +337,9 @@ function ProductForm({
           </Field>
           <Field label="Descripción corta"><input className="input-aura" value={form.shortDescription ?? ''} onChange={(e) => setForm({ ...form, shortDescription: e.target.value })} /></Field>
           <Field label="Descripción larga"><textarea className="input-aura" rows={4} value={form.description ?? ''} onChange={(e) => setForm({ ...form, description: e.target.value })} /></Field>
-          <div className="grid grid-cols-2 gap-4">
-            <Field label="Precio (COP)"><input type="number" className="input-aura" value={form.priceCOP ?? 0} onChange={(e) => setForm({ ...form, priceCOP: Number(e.target.value) })} /></Field>
-            <Field label="Precio antes (opcional)"><input type="number" className="input-aura" value={form.compareAtPriceCOP ?? ''} onChange={(e) => setForm({ ...form, compareAtPriceCOP: e.target.value ? Number(e.target.value) : undefined })} /></Field>
+          <div className="grid grid-cols-1 xs:grid-cols-2 gap-4">
+            <Field label="Precio (COP)"><input type="number" inputMode="numeric" pattern="[0-9]*" min="0" className="input-aura" value={form.priceCOP ?? 0} onChange={(e) => setForm({ ...form, priceCOP: Number(e.target.value) })} /></Field>
+            <Field label="Precio antes (opcional)"><input type="number" inputMode="numeric" pattern="[0-9]*" min="0" className="input-aura" value={form.compareAtPriceCOP ?? ''} onChange={(e) => setForm({ ...form, compareAtPriceCOP: e.target.value ? Number(e.target.value) : undefined })} /></Field>
           </div>
           <Field label="Imagen URL"><input className="input-aura" value={form.images?.[0] ?? ''} onChange={(e) => setForm({ ...form, images: [e.target.value] })} /></Field>
           {form.images?.[0] && (
@@ -315,12 +354,12 @@ function ProductForm({
               />
             </div>
           )}
-          <div className="flex gap-6 pt-2">
-            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={!!form.active} onChange={(e) => setForm({ ...form, active: e.target.checked })} /> Activo</label>
-            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={!!form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} /> Destacado</label>
+          <div className="flex flex-wrap gap-4 pt-2">
+            <label className="flex items-center gap-2 text-fluid-sm"><input type="checkbox" checked={!!form.active} onChange={(e) => setForm({ ...form, active: e.target.checked })} /> Activo</label>
+            <label className="flex items-center gap-2 text-fluid-sm"><input type="checkbox" checked={!!form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} /> Destacado</label>
           </div>
         </div>
-        <div className="flex gap-3 mt-8">
+        <div className="flex flex-col-reverse xs:flex-row gap-3 mt-6 sm:mt-8 sticky bottom-0 bg-rose-50/95 backdrop-blur -mx-6 sm:-mx-8 -mb-6 sm:-mb-8 px-6 sm:px-8 py-4 border-t border-rose-150">
           <button onClick={onClose} className="btn-ghost flex-1">Cancelar</button>
           <button onClick={handleSave} disabled={saving} className="btn-gold flex-1 disabled:opacity-50">
             {saving ? 'Guardando…' : 'Guardar'}
@@ -347,7 +386,7 @@ function Chip({
     <button
       onClick={onClick}
       className={
-        'text-xs uppercase tracking-widest px-4 py-2 rounded-full border transition ' +
+        'text-fluid-xs uppercase tracking-widest px-4 py-2.5 rounded-full border transition snap-start shrink-0 ' +
         (active
           ? accent === 'warn'
             ? 'bg-amber-500 text-white border-amber-500'

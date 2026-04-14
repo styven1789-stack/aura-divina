@@ -35,23 +35,40 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen hero-aura flex items-center justify-center p-6">
-      <form onSubmit={onSubmit} className="card-soft p-10 w-full max-w-md">
+    <div className="min-h-[100dvh] hero-aura flex items-center justify-center p-4 sm:p-6">
+      <form onSubmit={onSubmit} className="card-soft p-6 sm:p-10 w-full max-w-md">
         <div className="flex justify-center">
           <Logo variant="stacked" />
         </div>
         <div className="mt-8 gold-divider" />
-        <h1 className="mt-6 font-serif text-2xl text-center text-ink-900">Panel administrativo</h1>
-        <p className="text-center text-xs uppercase tracking-widest text-ink-600 mt-1">Acceso restringido</p>
+        <h1 className="mt-6 font-serif text-fluid-2xl text-center text-ink-900">Panel administrativo</h1>
+        <p className="text-center text-fluid-xs uppercase tracking-widest text-ink-600 mt-1">Acceso restringido</p>
 
         <div className="mt-8 space-y-4">
           <div>
             <label className="label-aura">Correo</label>
-            <input value={email} onChange={(e) => setEmail(e.target.value)} className="input-aura" type="email" required />
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="input-aura"
+              type="email"
+              inputMode="email"
+              autoComplete="username"
+              autoCapitalize="off"
+              spellCheck={false}
+              required
+            />
           </div>
           <div>
             <label className="label-aura">Contraseña</label>
-            <input value={password} onChange={(e) => setPassword(e.target.value)} className="input-aura" type="password" required />
+            <input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="input-aura"
+              type="password"
+              autoComplete="current-password"
+              required
+            />
           </div>
         </div>
 
@@ -61,7 +78,7 @@ export default function AdminLoginPage() {
           {loading ? 'Ingresando…' : 'Entrar al panel'}
         </button>
 
-        <p className="mt-6 text-center text-[11px] text-ink-600">
+        <p className="mt-6 text-center text-fluid-xs text-ink-600">
           Credenciales por defecto: <code>admin@auradivina.co</code> / <code>AuraDivina2026!</code>
         </p>
       </form>

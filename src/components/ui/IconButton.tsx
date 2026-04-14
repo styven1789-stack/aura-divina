@@ -20,7 +20,7 @@ const VARIANT_CLASS: Record<Variant, string> = {
 
 const SIZE_CLASS: Record<Size, string> = {
   sm: 'w-8 h-8',
-  md: 'w-10 h-10',
+  md: 'w-11 h-11',
   lg: 'w-12 h-12',
 };
 

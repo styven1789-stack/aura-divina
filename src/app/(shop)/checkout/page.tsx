@@ -231,7 +231,7 @@ export default function CheckoutPage() {
 
   return (
     <section className="container-aura py-12">
-      <h1 className="h-display text-4xl md:text-5xl text-ink-900 mb-2">Checkout</h1>
+      <h1 className="h-display text-fluid-4xl text-ink-900 mb-2">Checkout</h1>
       <p className="text-ink-700/70 mb-8">Pago contraentrega · Solo completa los datos de envío.</p>
 
       {user && user.addresses.length > 0 && (
@@ -266,12 +266,12 @@ export default function CheckoutPage() {
         </div>
       )}
 
-      <form onSubmit={onSubmit} className="grid lg:grid-cols-3 gap-8">
+      <form id="checkout-form" onSubmit={onSubmit} className="grid lg:grid-cols-3 gap-8 pb-32 lg:pb-0">
         <div className="lg:col-span-2 space-y-6">
           {/* Cobertura primero */}
-          <section className="card-soft p-6">
-            <h2 className="font-serif text-2xl text-ink-900 mb-4">1. ¿Dónde lo recibes?</h2>
-            <div className="grid sm:grid-cols-2 gap-4">
+          <section className="card-soft p-4 sm:p-6">
+            <h2 className="font-serif text-fluid-2xl text-ink-900 mb-4">1. ¿Dónde lo recibes?</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="label-aura">Ciudad</label>
                 <select value={city} onChange={(e) => { setCity(e.target.value); setNeighborhood(''); }} className="input-aura">
@@ -303,18 +303,61 @@ export default function CheckoutPage() {
           </section>
 
           {/* Datos */}
-          <section className="card-soft p-6">
-            <h2 className="font-serif text-2xl text-ink-900 mb-4">2. Tus datos</h2>
-            <div className="grid sm:grid-cols-2 gap-4">
-              <Input label="Nombre completo" value={form.fullName} onChange={(v) => setForm({ ...form, fullName: v })} required />
-              <Input label="Celular (WhatsApp)" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} placeholder="3XXXXXXXXX" required />
-              <Input label="Correo (opcional)" value={form.email} onChange={(v) => setForm({ ...form, email: v })} type="email" />
-              <Input label="Referencia (torre, apto, color)" value={form.reference} onChange={(v) => setForm({ ...form, reference: v })} />
+          <section className="card-soft p-4 sm:p-6">
+            <h2 className="font-serif text-fluid-2xl text-ink-900 mb-4">2. Tus datos</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Input
+                label="Nombre completo"
+                value={form.fullName}
+                onChange={(v) => setForm({ ...form, fullName: v })}
+                required
+                autoComplete="name"
+                autoCapitalize="words"
+              />
+              <Input
+                label="Celular (WhatsApp)"
+                value={form.phone}
+                onChange={(v) => setForm({ ...form, phone: v })}
+                placeholder="3XXXXXXXXX"
+                required
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                pattern="[0-9]{10}"
+              />
+              <Input
+                label="Correo (opcional)"
+                value={form.email}
+                onChange={(v) => setForm({ ...form, email: v })}
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                autoCapitalize="off"
+                spellCheck={false}
+              />
+              <Input
+                label="Referencia (torre, apto, color)"
+                value={form.reference}
+                onChange={(v) => setForm({ ...form, reference: v })}
+                autoComplete="address-line2"
+              />
               <div className="sm:col-span-2">
-                <Input label="Dirección" value={form.addressLine1} onChange={(v) => setForm({ ...form, addressLine1: v })} placeholder="Cra 43A # 5 - 50" required />
+                <Input
+                  label="Dirección"
+                  value={form.addressLine1}
+                  onChange={(v) => setForm({ ...form, addressLine1: v })}
+                  placeholder="Cra 43A # 5 - 50"
+                  required
+                  autoComplete="address-line1"
+                />
               </div>
               <div className="sm:col-span-2">
-                <Input label="Notas para el repartidor" value={form.notes} onChange={(v) => setForm({ ...form, notes: v })} />
+                <Input
+                  label="Notas para el repartidor"
+                  value={form.notes}
+                  onChange={(v) => setForm({ ...form, notes: v })}
+                  rows={3}
+                />
               </div>
             </div>
 
@@ -334,8 +377,8 @@ export default function CheckoutPage() {
           {error && <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-sm">{error}</div>}
         </div>
 
-        <aside className="card-soft p-6 h-fit space-y-4">
-          <h2 className="font-serif text-2xl text-ink-900">Tu pedido</h2>
+        <aside className="card-soft p-5 md:p-6 h-fit space-y-4 lg:sticky lg:top-24 lg:self-start">
+          <h2 className="font-serif text-fluid-2xl text-ink-900">Tu pedido</h2>
           <div className="space-y-3">
             {lines.map((l) => (
               <div key={l.productId + l.variantId} className="flex gap-3 items-center">
@@ -346,7 +389,7 @@ export default function CheckoutPage() {
                 )}
                 <div className="flex-1 text-sm">
                   <p className="text-ink-900">{l.name} <span className="text-ink-600">×{l.quantity}</span></p>
-                  {l.variantLabel && <p className="text-[10px] uppercase tracking-widest text-ink-600">{l.variantLabel}</p>}
+                  {l.variantLabel && <p className="text-fluid-xs uppercase tracking-widest text-ink-600">{l.variantLabel}</p>}
                 </div>
                 <p className="text-sm font-semibold">{formatCOP(l.unitPriceCOP * l.quantity)}</p>
               </div>
@@ -359,17 +402,35 @@ export default function CheckoutPage() {
           </div>
           <div className="gold-divider" />
           <div className="flex justify-between items-baseline">
-            <span className="text-xs uppercase tracking-widest2 text-ink-600">Total contraentrega</span>
-            <span className="text-2xl font-serif text-ink-900">{formatCOP(total)}</span>
+            <span className="text-fluid-xs uppercase tracking-widest2 text-ink-600">Total contraentrega</span>
+            <span className="text-fluid-2xl font-serif text-ink-900">{formatCOP(total)}</span>
           </div>
           <button type="submit" disabled={!coverage || submitting} className="btn-gold w-full disabled:opacity-50">
             {submitting ? 'Procesando…' : 'Confirmar pedido contraentrega'}
           </button>
-          <p className="text-[11px] text-center text-ink-600 leading-relaxed">
+          <p className="text-fluid-xs text-center text-ink-600 leading-relaxed">
             Al confirmar te llevaremos a WhatsApp para validar tu pedido con nuestro equipo y agendar tu entrega.
           </p>
         </aside>
       </form>
+
+      {/* Sticky mobile submit bar */}
+      <div className="lg:hidden fixed left-0 right-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] z-30 pointer-events-none">
+        <div className="mx-3 card-luxe !rounded-3xl !shadow-luxe p-3 flex items-center gap-3 pointer-events-auto">
+          <div className="flex-1 min-w-0">
+            <p className="text-fluid-xs uppercase tracking-widest2 text-ink-600">Total contraentrega</p>
+            <p className="font-serif text-fluid-xl text-ink-900 truncate">{formatCOP(total)}</p>
+          </div>
+          <button
+            type="submit"
+            form="checkout-form"
+            disabled={!coverage || submitting}
+            className="btn-gold !px-4 !py-3 text-fluid-sm shrink-0 tap-target disabled:opacity-50"
+          >
+            {submitting ? '…' : 'Confirmar'}
+          </button>
+        </div>
+      </div>
     </section>
   );
 }
@@ -385,20 +446,51 @@ function Row({ label, value }: { label: string; value: string }) {
 
 function Input({
   label, value, onChange, placeholder, type = 'text', required,
+  inputMode, autoComplete, pattern, autoCapitalize, spellCheck, rows,
 }: {
-  label: string; value: string; onChange: (v: string) => void; placeholder?: string; type?: string; required?: boolean;
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+  type?: string;
+  required?: boolean;
+  inputMode?: 'text' | 'tel' | 'email' | 'numeric' | 'search' | 'decimal' | 'url';
+  autoComplete?: string;
+  pattern?: string;
+  autoCapitalize?: 'off' | 'none' | 'sentences' | 'words' | 'characters';
+  spellCheck?: boolean;
+  rows?: number;
 }) {
   return (
     <div>
       <label className="label-aura">{label}{required && <span className="text-gold-600 ml-1">*</span>}</label>
-      <input
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        type={type}
-        required={required}
-        className="input-aura"
-      />
+      {rows ? (
+        <textarea
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          required={required}
+          rows={rows}
+          autoComplete={autoComplete}
+          autoCapitalize={autoCapitalize}
+          spellCheck={spellCheck}
+          className="input-aura resize-y"
+        />
+      ) : (
+        <input
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          type={type}
+          required={required}
+          inputMode={inputMode}
+          autoComplete={autoComplete}
+          pattern={pattern}
+          autoCapitalize={autoCapitalize}
+          spellCheck={spellCheck}
+          className="input-aura"
+        />
+      )}
     </div>
   );
 }

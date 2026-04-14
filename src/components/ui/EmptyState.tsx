@@ -16,8 +16,8 @@ export default function EmptyState({ icon, title, description, action, className
   return (
     <div className={`card-soft p-12 md:p-16 text-center ${className}`}>
       {icon && <div className="mx-auto mb-5 w-16 h-16 grid place-items-center text-gold-600">{icon}</div>}
-      <h3 className="font-serif text-2xl text-ink-900">{title}</h3>
-      {description && <p className="mt-2 text-ink-700/70 max-w-md mx-auto">{description}</p>}
+      <h3 className="font-serif text-fluid-2xl text-ink-900">{title}</h3>
+      {description && <p className="mt-2 text-fluid-sm text-ink-700/70 max-w-md mx-auto">{description}</p>}
       {action && (
         <div className="mt-6">
           {action.href ? (

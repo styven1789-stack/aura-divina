@@ -4,6 +4,25 @@ const config: Config = {
   content: ['./src/**/*.{ts,tsx}', './app/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      screens: {
+        xs: '480px',
+        '2xl': '1440px',
+        '3xl': '1760px',
+      },
+      fontSize: {
+        'fluid-micro':   ['var(--fs-micro)',   { lineHeight: '1.4' }],
+        'fluid-xs':      ['var(--fs-xs)',      { lineHeight: '1.45' }],
+        'fluid-sm':      ['var(--fs-sm)',      { lineHeight: '1.5' }],
+        'fluid-base':    ['var(--fs-base)',    { lineHeight: 'var(--lh-body)' }],
+        'fluid-lg':      ['var(--fs-lg)',      { lineHeight: '1.5' }],
+        'fluid-xl':      ['var(--fs-xl)',      { lineHeight: '1.4' }],
+        'fluid-2xl':     ['var(--fs-2xl)',     { lineHeight: 'var(--lh-heading)' }],
+        'fluid-3xl':     ['var(--fs-3xl)',     { lineHeight: 'var(--lh-heading)' }],
+        'fluid-4xl':     ['var(--fs-4xl)',     { lineHeight: '1.1' }],
+        'fluid-5xl':     ['var(--fs-5xl)',     { lineHeight: 'var(--lh-tight)' }],
+        'fluid-6xl':     ['var(--fs-6xl)',     { lineHeight: 'var(--lh-tight)' }],
+        'fluid-display': ['var(--fs-display)', { lineHeight: 'var(--lh-tight)' }],
+      },
       colors: {
         rose: {
           50: '#fff5f8',

@@ -53,7 +53,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div className="fixed top-5 right-5 z-[100] flex flex-col gap-2 pointer-events-none max-w-[calc(100vw-2.5rem)]">
+      <div className="fixed top-[calc(env(safe-area-inset-top)+1rem)] right-4 left-4 lg:right-5 lg:top-5 lg:left-auto z-[100] flex flex-col gap-2 pointer-events-none lg:max-w-sm">
         {items.map((t) => (
           <Toast
             key={t.id}
@@ -77,15 +77,15 @@ function Toast({ item, onClose }: { item: ToastItem; onClose: () => void }) {
 
   return (
     <div
-      className={`pointer-events-auto min-w-[280px] max-w-sm rounded-2xl border ${p.border} ${p.bg} shadow-soft p-4 flex items-start gap-3 animate-in slide-in-from-right-4 fade-in`}
+      className={`pointer-events-auto min-w-0 w-full lg:min-w-[280px] lg:max-w-sm rounded-2xl border ${p.border} ${p.bg} shadow-soft p-4 flex items-start gap-3 animate-in slide-in-from-right-4 fade-in`}
       role="status"
     >
       <div className={`grid place-items-center w-7 h-7 rounded-full bg-white border ${p.border} ${p.icon} font-bold shrink-0`}>
         {p.emoji}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-ink-900 leading-tight">{item.title}</p>
-        {item.description && <p className="text-xs text-ink-700 mt-0.5 leading-snug">{item.description}</p>}
+        <p className="text-fluid-sm font-semibold text-ink-900 leading-tight">{item.title}</p>
+        {item.description && <p className="text-fluid-xs text-ink-700 mt-0.5 leading-snug">{item.description}</p>}
       </div>
       <button
         onClick={onClose}

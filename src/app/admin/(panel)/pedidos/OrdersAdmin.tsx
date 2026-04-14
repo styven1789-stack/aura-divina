@@ -59,8 +59,8 @@ export default function OrdersAdmin({ initial, initialStatus = 'all' }: { initia
 
   return (
     <div>
-      <h1 className="h-display text-4xl text-ink-900 mb-2">Pedidos</h1>
-      <p className="text-ink-700/70 mb-6">{orders.length} pedidos en total · {visible.length} mostrados</p>
+      <h1 className="h-display text-fluid-4xl text-ink-900 mb-2">Pedidos</h1>
+      <p className="text-ink-700/70 mb-6 text-fluid-sm">{orders.length} pedidos en total · {visible.length} mostrados</p>
 
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <div className="relative flex-1 max-w-md">
@@ -69,6 +69,9 @@ export default function OrdersAdmin({ initial, initialStatus = 'all' }: { initia
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por código, cliente, teléfono o barrio…"
+            autoCapitalize="off"
+            autoComplete="off"
+            spellCheck={false}
             className="input-aura !pl-11"
           />
           <span className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-600">
@@ -77,7 +80,7 @@ export default function OrdersAdmin({ initial, initialStatus = 'all' }: { initia
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex overflow-x-auto scrollbar-none gap-2 mb-4 md:mb-6 -mx-4 px-4 snap-x snap-mandatory sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible">
         <FilterChip active={filter === 'all'} onClick={() => setFilter('all')}>Todos · {orders.length}</FilterChip>
         {STATUSES.map((s) => {
           const count = orders.filter((o) => o.status === s).length;
@@ -94,53 +97,83 @@ export default function OrdersAdmin({ initial, initialStatus = 'all' }: { initia
           Aún no hay pedidos en este estado.
         </div>
       ) : (
-        <div className="card-soft overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-rose-100/50 text-left text-[10px] uppercase tracking-widest2 text-ink-700">
-              <tr>
-                <th className="px-4 py-3">Código</th>
-                <th>Cliente</th>
-                <th>Tel</th>
-                <th>Zona</th>
-                <th>Estado</th>
-                <th>Fecha</th>
-                <th className="text-right pr-4">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {visible.map((o) => (
-                <tr key={o.id} onClick={() => setSelected(o)} className="border-t border-rose-150/60 hover:bg-rose-50/50 cursor-pointer">
-                  <td className="px-4 py-3 font-mono text-gold-600 font-semibold">{o.code}</td>
-                  <td>{o.shipping.fullName}</td>
-                  <td className="font-mono text-xs">{o.shipping.phone}</td>
-                  <td>{o.shipping.neighborhood}</td>
-                  <td>
-                    <span className={`inline-block text-[10px] uppercase tracking-widest px-2 py-1 rounded-full border ${ORDER_STATUS_COLOR[o.status]}`}>
-                      {ORDER_STATUS_LABEL[o.status]}
-                    </span>
-                  </td>
-                  <td className="text-xs text-ink-600"><ClientDate iso={o.createdAt} /></td>
-                  <td className="text-right pr-4 font-semibold">{formatCOP(o.totalCOP)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <>
+          {/* Card view móvil */}
+          <ul className="md:hidden grid gap-3">
+            {visible.map((o) => (
+              <li key={o.id}>
+                <button
+                  onClick={() => setSelected(o)}
+                  className="w-full text-left card-soft p-4 hover:border-gold-500 transition grid grid-cols-[1fr_auto] gap-x-3 gap-y-1.5 items-center"
+                >
+                  <span className="font-mono text-gold-600 font-semibold">{o.code}</span>
+                  <span className={`text-fluid-xs uppercase tracking-widest px-2 py-1 rounded-full border ${ORDER_STATUS_COLOR[o.status]}`}>
+                    {ORDER_STATUS_LABEL[o.status]}
+                  </span>
+                  <span className="col-span-2 text-fluid-sm text-ink-900 truncate">
+                    {o.shipping.fullName}
+                  </span>
+                  <span className="col-span-2 text-fluid-xs text-ink-600 truncate">
+                    {o.shipping.neighborhood} · <span className="font-mono">{o.shipping.phone}</span>
+                  </span>
+                  <span className="text-fluid-xs text-ink-600"><ClientDate iso={o.createdAt} /></span>
+                  <span className="font-semibold text-ink-900 justify-self-end">{formatCOP(o.totalCOP)}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          {/* Tabla md+ */}
+          <div className="hidden md:block card-soft overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-fluid-sm min-w-[760px]">
+                <thead className="bg-rose-100/50 text-left text-fluid-xs uppercase tracking-widest2 text-ink-700">
+                  <tr>
+                    <th className="px-4 py-3 sticky left-0 bg-rose-100/95 z-10">Código</th>
+                    <th>Cliente</th>
+                    <th>Tel</th>
+                    <th>Zona</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th className="text-right pr-4">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visible.map((o) => (
+                    <tr key={o.id} onClick={() => setSelected(o)} className="border-t border-rose-150/60 hover:bg-rose-50/50 cursor-pointer group">
+                      <td className="px-4 py-3 font-mono text-gold-600 font-semibold sticky left-0 bg-white z-10 group-hover:bg-rose-50/95">{o.code}</td>
+                      <td>{o.shipping.fullName}</td>
+                      <td className="font-mono text-fluid-xs">{o.shipping.phone}</td>
+                      <td>{o.shipping.neighborhood}</td>
+                      <td>
+                        <span className={`inline-block text-fluid-xs uppercase tracking-widest px-2 py-1 rounded-full border ${ORDER_STATUS_COLOR[o.status]}`}>
+                          {ORDER_STATUS_LABEL[o.status]}
+                        </span>
+                      </td>
+                      <td className="text-fluid-xs text-ink-600"><ClientDate iso={o.createdAt} /></td>
+                      <td className="text-right pr-4 font-semibold">{formatCOP(o.totalCOP)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
       )}
 
       {selected && (
-        <div className="fixed inset-0 z-50 bg-ink-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-rose-50 rounded-3xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-widest2 text-gold-600">Pedido</p>
-                <h2 className="font-serif text-3xl text-ink-900">{selected.code}</h2>
-                <p className="text-xs text-ink-600 mt-1"><ClientDate iso={selected.createdAt} /></p>
+        <div className="fixed inset-0 z-50 bg-ink-900/60 backdrop-blur-sm flex items-center justify-center p-0 md:p-4">
+          <div className="bg-rose-50 rounded-none md:rounded-3xl p-5 sm:p-8 w-full max-w-2xl max-h-[100dvh] md:max-h-[90vh] h-[100dvh] md:h-auto overflow-y-auto">
+            <div className="flex items-start justify-between gap-3 sticky top-0 bg-rose-50/95 backdrop-blur -mx-5 sm:-mx-8 -mt-5 sm:-mt-8 px-5 sm:px-8 pt-5 sm:pt-8 pb-3 z-10">
+              <div className="min-w-0">
+                <p className="text-fluid-xs uppercase tracking-widest2 text-gold-600">Pedido</p>
+                <h2 className="font-serif text-fluid-3xl text-ink-900 break-all">{selected.code}</h2>
+                <p className="text-fluid-xs text-ink-600 mt-1"><ClientDate iso={selected.createdAt} /></p>
               </div>
-              <button onClick={() => setSelected(null)} className="btn-ghost !py-2 !px-4">×</button>
+              <button onClick={() => setSelected(null)} aria-label="Cerrar" className="btn-ghost !py-2 !px-4 tap-target shrink-0">×</button>
             </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
+            <div className="mt-6 grid grid-cols-1 xs:grid-cols-2 gap-4 text-fluid-sm">
               <Info label="Cliente" value={selected.shipping.fullName} />
               <Info label="Celular" value={selected.shipping.phone} />
               <Info label="Ciudad" value={selected.shipping.city} />
@@ -152,7 +185,7 @@ export default function OrdersAdmin({ initial, initialStatus = 'all' }: { initia
 
             <div className="gold-divider my-6" />
 
-            <h3 className="font-serif text-xl mb-3">Productos</h3>
+            <h3 className="font-serif text-fluid-xl mb-3">Productos</h3>
             <div className="space-y-2">
               {selected.items.map((it, i) => (
                 <div key={i} className="flex items-center gap-3 p-2 bg-white/70 rounded-2xl">
@@ -161,19 +194,19 @@ export default function OrdersAdmin({ initial, initialStatus = 'all' }: { initia
                       <Image src={it.image} alt="" fill sizes="48px" className="object-cover" />
                     </div>
                   )}
-                  <div className="flex-1">
-                    <p className="font-medium">{it.name}</p>
-                    <p className="text-xs text-ink-600">×{it.quantity}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate">{it.name}</p>
+                    <p className="text-fluid-xs text-ink-600">×{it.quantity}</p>
                   </div>
                   <p className="font-semibold">{formatCOP(it.subtotalCOP)}</p>
                 </div>
               ))}
             </div>
 
-            <div className="mt-6 space-y-1.5 text-sm">
+            <div className="mt-6 space-y-1.5 text-fluid-sm">
               <div className="flex justify-between"><span>Subtotal</span><span>{formatCOP(selected.subtotalCOP)}</span></div>
               <div className="flex justify-between"><span>Envío</span><span>{formatCOP(selected.shippingCOP)}</span></div>
-              <div className="flex justify-between text-lg font-serif text-ink-900 pt-2 border-t border-rose-150"><span>Total</span><span>{formatCOP(selected.totalCOP)}</span></div>
+              <div className="flex justify-between text-fluid-lg font-serif text-ink-900 pt-2 border-t border-rose-150"><span>Total</span><span>{formatCOP(selected.totalCOP)}</span></div>
             </div>
 
             <div className="mt-6">
@@ -188,7 +221,7 @@ export default function OrdersAdmin({ initial, initialStatus = 'all' }: { initia
                       onClick={() => setPending({ order: selected, next: s })}
                       disabled={!allowed || isCurrent}
                       title={!allowed ? `No se puede pasar de ${ORDER_STATUS_LABEL[selected.status]} a ${ORDER_STATUS_LABEL[s]}` : undefined}
-                      className={`text-xs uppercase tracking-widest px-3 py-2 rounded-full border transition ${
+                      className={`text-fluid-xs uppercase tracking-widest px-3 py-2.5 rounded-full border transition ${
                         isCurrent
                           ? 'bg-ink-900 text-white border-ink-900 cursor-default'
                           : allowed
@@ -203,7 +236,7 @@ export default function OrdersAdmin({ initial, initialStatus = 'all' }: { initia
               </div>
             </div>
 
-            <div className="mt-6 flex gap-3">
+            <div className="mt-6 flex flex-col-reverse sm:flex-row gap-3">
               <a
                 href={`https://wa.me/57${selected.shipping.phone}?text=${encodeURIComponent(`Hola ${selected.shipping.fullName}! Soy de Aura Divina ✨ Confirmamos tu pedido ${selected.code} por ${formatCOP(selected.totalCOP)}.`)}`}
                 target="_blank"
@@ -257,7 +290,7 @@ function FilterChip({ active, onClick, children }: { active: boolean; onClick: (
     <button
       onClick={onClick}
       className={
-        'text-xs uppercase tracking-widest px-4 py-2 rounded-full border transition ' +
+        'text-fluid-xs uppercase tracking-widest px-4 py-2.5 rounded-full border transition snap-start shrink-0 ' +
         (active ? 'bg-ink-900 text-white border-ink-900' : 'bg-white text-ink-700 border-rose-150 hover:border-gold-500')
       }
     >
@@ -269,7 +302,7 @@ function FilterChip({ active, onClick, children }: { active: boolean; onClick: (
 function Info({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-[10px] uppercase tracking-widest2 text-ink-600">{label}</p>
+      <p className="text-fluid-xs uppercase tracking-widest2 text-ink-600">{label}</p>
       <p className="text-ink-900">{value}</p>
     </div>
   );

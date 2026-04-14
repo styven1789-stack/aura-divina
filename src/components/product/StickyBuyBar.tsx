@@ -44,7 +44,7 @@ export default function StickyBuyBar({ product, onAddClick, disabled }: StickyBu
   return (
     <div
       aria-hidden={!visible}
-      className={`md:hidden fixed left-0 right-0 bottom-16 z-30 transition-transform duration-300 ${
+      className={`lg:hidden fixed left-0 right-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] z-30 transition-transform duration-300 ${
         visible ? 'translate-y-0' : 'translate-y-full'
       }`}
     >
@@ -65,7 +65,7 @@ export default function StickyBuyBar({ product, onAddClick, disabled }: StickyBu
         <button
           onClick={onAddClick}
           disabled={disabled}
-          className="btn-gold !px-4 !py-2.5 text-xs shrink-0 disabled:opacity-50"
+          className="btn-gold !px-4 !py-3 text-fluid-sm shrink-0 tap-target disabled:opacity-50"
         >
           {disabled ? 'Sin stock' : 'Agregar'}
         </button>

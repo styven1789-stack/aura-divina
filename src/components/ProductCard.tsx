@@ -28,7 +28,7 @@ export default function ProductCard({ p }: { p: Product }) {
             src={p.images[0]}
             alt={`${p.name} · Aura Divina`}
             fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            sizes="(max-width: 479px) 50vw, (max-width: 767px) 50vw, (max-width: 1023px) 33vw, (max-width: 1439px) 25vw, 20vw"
             className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
 
@@ -56,10 +56,10 @@ export default function ProductCard({ p }: { p: Product }) {
           )}
         </div>
 
-        <div className="px-5 pt-5 pb-3">
+        <div className="px-4 pt-4 pb-3 sm:px-5 sm:pt-5">
           <p className="eyebrow mb-1">{p.category}</p>
-          <h3 className="font-serif text-xl text-ink-900 leading-tight">{p.name}</h3>
-          <p className="text-xs text-ink-600 mt-1 line-clamp-2">{p.shortDescription}</p>
+          <h3 className="font-serif text-fluid-lg text-ink-900 leading-tight">{p.name}</h3>
+          <p className="text-fluid-xs text-ink-600 mt-1 line-clamp-2">{p.shortDescription}</p>
           <div className="mt-3">
             <StarRating rating={brandStats.averageRating} count={brandStats.reviewCount} size="sm" showCount />
           </div>
@@ -68,7 +68,7 @@ export default function ProductCard({ p }: { p: Product }) {
           </div>
         </div>
       </Link>
-      <div className="px-5 pb-5">
+      <div className="px-4 pb-4 sm:px-5 sm:pb-5">
         <QuickAddButton product={p} />
       </div>
     </article>

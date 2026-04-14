@@ -37,21 +37,21 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-[80vh] hero-aura flex items-center justify-center p-6">
+    <div className="min-h-[80dvh] hero-aura flex items-center justify-center p-4 sm:p-6">
       <div className="w-full max-w-md">
-        <form onSubmit={onSubmit} className="card-soft p-10">
+        <form onSubmit={onSubmit} className="card-soft p-6 sm:p-10">
           <div className="flex justify-center">
             <Logo variant="stacked" />
           </div>
           <div className="mt-8 gold-divider" />
-          <h1 className="mt-6 font-serif text-3xl text-center text-ink-900">Ingresar</h1>
+          <h1 className="mt-6 font-serif text-fluid-3xl text-center text-ink-900">Ingresar</h1>
           <p className="text-center text-xs uppercase tracking-widest text-ink-600 mt-1">Mi cuenta Aura Divina</p>
 
           <a href="/api/auth/google/start" className="btn-ghost w-full mt-8 inline-flex items-center justify-center gap-2">
             <GoogleIcon /> Continuar con Google
           </a>
 
-          <div className="my-6 flex items-center gap-3 text-[10px] uppercase tracking-widest2 text-ink-600">
+          <div className="my-6 flex items-center gap-3 text-fluid-xs uppercase tracking-widest2 text-ink-600">
             <span className="flex-1 h-px bg-rose-150" />
             <span>o con tu correo</span>
             <span className="flex-1 h-px bg-rose-150" />
@@ -60,11 +60,28 @@ export default function LoginPage() {
           <div className="space-y-4">
             <div>
               <label className="label-aura">Correo</label>
-              <input value={email} onChange={(e) => setEmail(e.target.value)} className="input-aura" type="email" required />
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="input-aura"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                autoCapitalize="off"
+                spellCheck={false}
+                required
+              />
             </div>
             <div>
               <label className="label-aura">Contraseña</label>
-              <input value={password} onChange={(e) => setPassword(e.target.value)} className="input-aura" type="password" required />
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input-aura"
+                type="password"
+                autoComplete="current-password"
+                required
+              />
             </div>
           </div>
 
@@ -72,7 +89,7 @@ export default function LoginPage() {
             {loading ? 'Ingresando…' : 'Entrar'}
           </button>
 
-          <p className="mt-6 text-center text-sm text-ink-700">
+          <p className="mt-6 text-center text-fluid-sm text-ink-700">
             ¿Nueva por aquí?{' '}
             <Link href="/cuenta/registro" className="text-gold-600 font-semibold hover:underline">
               Crea tu cuenta

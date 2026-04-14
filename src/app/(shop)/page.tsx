@@ -47,16 +47,16 @@ export default async function HomePage() {
     <>
       {/* HERO editorial */}
       <section className="hero-aura relative overflow-hidden">
-        <div className="container-aura py-16 md:py-24 grid lg:grid-cols-2 gap-12 items-center">
+        <div className="container-aura py-12 md:py-20 lg:py-24 grid lg:grid-cols-2 gap-10 md:gap-12 items-center">
           {/* Texto */}
-          <div className="order-2 lg:order-1">
+          <div className="order-1 lg:order-1">
             <Eyebrow className="mb-5">Nueva colección · 2026</Eyebrow>
-            <h1 className="h-display text-5xl md:text-6xl lg:text-7xl text-ink-900 leading-[1.05]">
+            <h1 className="h-display text-fluid-display text-ink-900 leading-[1.05]">
               Joyería que revela
               <br />
               <span className="italic text-gold-600">tu luz.</span>
             </h1>
-            <p className="mt-6 max-w-lg text-ink-700/80 text-base md:text-lg leading-relaxed">
+            <p className="mt-6 max-w-lg text-ink-700/80 text-fluid-lg leading-relaxed">
               Piezas con baño de rodio · hechas con alma en Medellín y enviadas a tu puerta.
             </p>
 
@@ -79,48 +79,48 @@ export default async function HomePage() {
                 <p className="text-sm font-semibold text-ink-900">
                   {brandStats.averageRating} de 5 · Más de {brandStats.reviewCount} clientas nos eligieron
                 </p>
-                <p className="text-[11px] text-ink-600">Historias reales de mujeres que brillan con Aura Divina.</p>
+                <p className="text-fluid-xs text-ink-600">Historias reales de mujeres que brillan con Aura Divina.</p>
               </div>
             </div>
           </div>
 
           {/* Grid editorial asimétrico de imágenes */}
-          <div className="order-1 lg:order-2 relative">
-            <div className="grid grid-cols-5 grid-rows-6 gap-3 md:gap-4">
+          <div className="order-2 lg:order-2 relative">
+            <div className="grid grid-cols-2 md:grid-cols-5 md:grid-rows-6 gap-2 md:gap-4">
               {/* Imagen grande */}
-              <div className="col-span-3 row-span-6 relative rounded-4xl overflow-hidden shadow-luxe">
+              <div className="col-span-2 aspect-[4/5] md:col-span-3 md:row-span-6 md:aspect-auto relative rounded-4xl overflow-hidden shadow-luxe">
                 <Image
                   src={HERO_IMAGES.large}
                   alt="Modelo luciendo joyería Aura Divina con baño de rodio"
                   fill
-                  sizes="(max-width: 1024px) 60vw, 36vw"
+                  sizes="(max-width: 767px) 100vw, (max-width: 1023px) 60vw, 36vw"
                   priority
                   className="object-cover"
                 />
                 <div className="absolute top-4 left-4 animate-float">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur px-3 py-1.5 text-[10px] uppercase tracking-widest text-gold-700 font-bold shadow-soft">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur px-3 py-1.5 text-fluid-xs uppercase tracking-widest text-gold-700 font-bold shadow-soft">
                     <SparkleIcon size={12} className="text-gold-600" />
                     Entrega 24h
                   </span>
                 </div>
               </div>
               {/* Imagen pequeña superior */}
-              <div className="col-span-2 row-span-3 relative rounded-4xl overflow-hidden shadow-luxe">
+              <div className="col-span-1 aspect-square md:col-span-2 md:row-span-3 md:aspect-auto relative rounded-4xl overflow-hidden shadow-luxe">
                 <Image
                   src={HERO_IMAGES.small1}
                   alt="Detalle de anillo minimalista con baño de rodio"
                   fill
-                  sizes="(max-width: 1024px) 40vw, 24vw"
+                  sizes="(max-width: 767px) 50vw, (max-width: 1023px) 40vw, 24vw"
                   className="object-cover"
                 />
               </div>
               {/* Imagen pequeña inferior */}
-              <div className="col-span-2 row-span-3 relative rounded-4xl overflow-hidden shadow-luxe">
+              <div className="col-span-1 aspect-square md:col-span-2 md:row-span-3 md:aspect-auto relative rounded-4xl overflow-hidden shadow-luxe">
                 <Image
                   src={HERO_IMAGES.small2}
                   alt="Collar con dije de luna creciente"
                   fill
-                  sizes="(max-width: 1024px) 40vw, 24vw"
+                  sizes="(max-width: 767px) 50vw, (max-width: 1023px) 40vw, 24vw"
                   className="object-cover"
                 />
               </div>
@@ -149,7 +149,7 @@ export default async function HomePage() {
             Ver toda la colección <ChevronRight size={14} />
           </Link>
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 3xl:grid-cols-5 gap-4 md:gap-5">
           {featured.map((p) => (
             <ProductCard key={p.id} p={p} />
           ))}
@@ -170,7 +170,7 @@ export default async function HomePage() {
           align="center"
           className="mb-10"
         />
-        <div className="grid md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
           <CategoryCard
             title="Anillos"
             subtitle="Esenciales"
@@ -204,7 +204,7 @@ export default async function HomePage() {
             align="center"
             className="mb-10"
           />
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
             <FeatureCard
               icon={<TruckIcon size={26} />}
               title="Envío 24h en Medellín"

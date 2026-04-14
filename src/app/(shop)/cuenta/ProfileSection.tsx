@@ -36,7 +36,7 @@ export default function ProfileSection({ user, onChange }: { user: PublicUser; o
   };
 
   return (
-    <div className="card-soft p-6 max-w-xl">
+    <div className="card-soft p-5 sm:p-6 max-w-xl">
       <div className="flex items-center gap-4 mb-6">
         {user.avatarUrl ? (
           <Image
@@ -47,13 +47,13 @@ export default function ProfileSection({ user, onChange }: { user: PublicUser; o
             className="w-16 h-16 rounded-full object-cover border border-rose-150"
           />
         ) : (
-          <div className="w-16 h-16 rounded-full bg-rose-100 border border-rose-150 grid place-items-center font-serif text-2xl text-gold-600">
+          <div className="w-16 h-16 rounded-full bg-rose-100 border border-rose-150 grid place-items-center font-serif text-fluid-2xl text-gold-600">
             {user.name.charAt(0).toUpperCase()}
           </div>
         )}
         <div>
-          <p className="font-serif text-xl text-ink-900">{user.name}</p>
-          <p className="text-xs text-ink-600">
+          <p className="font-serif text-fluid-xl text-ink-900">{user.name}</p>
+          <p className="text-fluid-xs text-ink-600">
             {user.provider === 'google' ? 'Cuenta vinculada con Google' : 'Cuenta con correo y contraseña'}
             {user.emailVerified ? ' · verificada' : ''}
           </p>
@@ -63,15 +63,36 @@ export default function ProfileSection({ user, onChange }: { user: PublicUser; o
       <div className="space-y-4">
         <div>
           <label className="label-aura">Nombre completo</label>
-          <input value={name} onChange={(e) => setName(e.target.value)} className="input-aura" />
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="input-aura"
+            autoComplete="name"
+            autoCapitalize="words"
+          />
         </div>
         <div>
           <label className="label-aura">Celular</label>
-          <input value={phone} onChange={(e) => setPhone(e.target.value)} className="input-aura" placeholder="3XXXXXXXXX" />
+          <input
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="input-aura"
+            placeholder="3XXXXXXXXX"
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            pattern="[0-9]{10}"
+          />
         </div>
         <div>
           <label className="label-aura">Correo</label>
-          <input value={user.email} readOnly className="input-aura opacity-60 cursor-not-allowed" />
+          <input
+            value={user.email}
+            readOnly
+            className="input-aura opacity-60 cursor-not-allowed"
+            type="email"
+            autoComplete="email"
+          />
         </div>
       </div>
 

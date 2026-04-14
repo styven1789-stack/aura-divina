@@ -29,18 +29,18 @@ export default async function TrackOrderPage({ params }: { params: Promise<{ cod
     <section className="container-aura py-12 max-w-3xl">
       <Link href="/pedido" className="text-xs uppercase tracking-widest text-ink-600 hover:text-gold-600">← Buscar otro pedido</Link>
 
-      <div className="mt-4 card-soft p-8">
-        <div className="flex items-start justify-between flex-wrap gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-widest2 text-gold-600">Tu pedido</p>
-            <h1 className="h-display text-4xl text-ink-900 font-mono">{order.code}</h1>
-            <p className="text-sm text-ink-600 mt-1">
+      <div className="mt-4 card-soft p-5 sm:p-8">
+        <div className="flex flex-col xs:flex-row items-start justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-fluid-xs uppercase tracking-widest2 text-gold-600">Tu pedido</p>
+            <h1 className="h-display text-fluid-4xl text-ink-900 font-mono break-all">{order.code}</h1>
+            <p className="text-fluid-sm text-ink-600 mt-1">
               Creado <ClientDate iso={order.createdAt} />
             </p>
           </div>
-          <div className="text-right">
-            <p className="text-xs uppercase tracking-widest text-ink-600">Total contraentrega</p>
-            <p className="text-3xl font-serif text-gold-600">{formatCOP(order.totalCOP)}</p>
+          <div className="xs:text-right">
+            <p className="text-fluid-xs uppercase tracking-widest text-ink-600">Total contraentrega</p>
+            <p className="text-fluid-3xl font-serif text-gold-600">{formatCOP(order.totalCOP)}</p>
           </div>
         </div>
 
@@ -73,10 +73,10 @@ export default async function TrackOrderPage({ params }: { params: Promise<{ cod
                     {current && <span className="absolute inset-0 rounded-full ring-4 ring-gold-300/40 animate-pulse" />}
                   </div>
                   <div className="flex-1 -mt-0.5">
-                    <p className={'font-serif text-lg ' + (done ? 'text-ink-900' : 'text-ink-600')}>
+                    <p className={'font-serif text-fluid-lg ' + (done ? 'text-ink-900' : 'text-ink-600')}>
                       {step.emoji} {step.label}
                     </p>
-                    <p className="text-xs text-ink-600">{step.sub}</p>
+                    <p className="text-fluid-xs text-ink-600">{step.sub}</p>
                   </div>
                 </li>
               );
@@ -97,7 +97,7 @@ export default async function TrackOrderPage({ params }: { params: Promise<{ cod
                 )}
                 <div className="flex-1">
                   <p className="text-sm font-medium text-ink-900">{it.name}</p>
-                  <p className="text-[11px] text-ink-600">×{it.quantity}</p>
+                  <p className="text-fluid-xs text-ink-600">×{it.quantity}</p>
                 </div>
                 <p className="text-sm font-semibold">{formatCOP(it.subtotalCOP)}</p>
               </div>
@@ -106,9 +106,9 @@ export default async function TrackOrderPage({ params }: { params: Promise<{ cod
         </div>
 
         {/* Resumen + entrega */}
-        <div className="grid sm:grid-cols-2 gap-4 mt-6 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 text-fluid-sm">
           <div className="card-soft p-4">
-            <p className="text-[10px] uppercase tracking-widest2 text-ink-600">Entrega</p>
+            <p className="text-fluid-xs uppercase tracking-widest2 text-ink-600">Entrega</p>
             <p className="mt-1 text-ink-900">{order.shipping.fullName}</p>
             <p className="text-ink-700">{order.shipping.neighborhood}, {order.shipping.city}</p>
           </div>

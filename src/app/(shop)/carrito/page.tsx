@@ -43,7 +43,7 @@ export default function CartPage() {
 
   return (
     <section className="container-aura py-12">
-      <h1 className="h-display text-4xl md:text-5xl text-ink-900 mb-6">Tu carrito</h1>
+      <h1 className="h-display text-fluid-4xl text-ink-900 mb-6">Tu carrito</h1>
 
       {/* Banner de envío promocional */}
       <div className={'mb-8 rounded-3xl p-5 border ' + (qualifies ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-100/50 border-rose-150')}>
@@ -70,37 +70,37 @@ export default function CartPage() {
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
           {lines.map((l) => (
-            <article key={l.productId + l.variantId} className="card-soft p-4 flex gap-4 items-center">
+            <article key={l.productId + l.variantId} className="card-soft p-4 flex flex-col xs:flex-row gap-3 xs:gap-4 xs:items-center">
               {l.image && (
-                <div className="relative w-24 h-24 rounded-2xl overflow-hidden bg-rose-100 shrink-0">
-                  <Image src={l.image} alt="" fill sizes="96px" className="object-cover" />
+                <div className="relative w-full aspect-square xs:w-24 xs:h-24 xs:aspect-auto rounded-2xl overflow-hidden bg-rose-100 shrink-0">
+                  <Image src={l.image} alt="" fill sizes="(max-width: 479px) 100vw, 96px" className="object-cover" />
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <h3 className="font-serif text-xl text-ink-900 truncate">{l.name}</h3>
+                <h3 className="font-serif text-fluid-lg text-ink-900 truncate">{l.name}</h3>
                 {l.variantLabel && (
-                  <p className="text-[10px] uppercase tracking-widest text-ink-600 mt-0.5">{l.variantLabel}</p>
+                  <p className="text-fluid-xs uppercase tracking-widest text-ink-600 mt-0.5">{l.variantLabel}</p>
                 )}
                 <div className="mt-1">
                   <PriceDisplay price={l.unitPriceCOP} size="sm" />
                 </div>
               </div>
-              <div className="flex flex-col items-end gap-2">
+              <div className="flex flex-row xs:flex-col items-center xs:items-end gap-3 xs:gap-2 justify-between xs:justify-start">
                 <div className="inline-flex items-center rounded-full bg-white border border-rose-150">
                   <button
                     onClick={() => setQty(l.productId, l.variantId, l.quantity - 1)}
                     aria-label="Disminuir cantidad"
-                    className="grid place-items-center w-9 h-9 text-ink-700 hover:bg-rose-100 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+                    className="grid place-items-center w-11 h-11 text-ink-700 hover:bg-rose-100 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
                   >
-                    <Minus size={14} />
+                    <Minus size={16} />
                   </button>
-                  <span className="px-2 text-sm min-w-[1.5rem] text-center">{l.quantity}</span>
+                  <span className="px-2 text-fluid-base min-w-[2rem] text-center">{l.quantity}</span>
                   <button
                     onClick={() => setQty(l.productId, l.variantId, l.quantity + 1)}
                     aria-label="Aumentar cantidad"
-                    className="grid place-items-center w-9 h-9 text-ink-700 hover:bg-rose-100 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+                    className="grid place-items-center w-11 h-11 text-ink-700 hover:bg-rose-100 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
                   >
-                    <Plus size={14} />
+                    <Plus size={16} />
                   </button>
                 </div>
                 <p className="font-semibold text-ink-900">{formatCOP(l.unitPriceCOP * l.quantity)}</p>
@@ -109,7 +109,7 @@ export default function CartPage() {
                     remove(l.productId, l.variantId);
                     toast.info('Quitado del carrito', l.name);
                   }}
-                  className="text-[10px] uppercase tracking-widest text-rose-600 hover:text-rose-700"
+                  className="text-fluid-xs uppercase tracking-widest text-rose-600 hover:text-rose-700 py-2"
                 >
                   Eliminar
                 </button>
@@ -118,7 +118,7 @@ export default function CartPage() {
           ))}
         </div>
 
-        <aside className="card-soft p-6 h-fit">
+        <aside className="card-soft p-5 md:p-6 h-fit lg:sticky lg:top-24 lg:self-start">
           <h2 className="font-serif text-2xl text-ink-900 mb-4">Resumen</h2>
           <div className="space-y-2 text-sm">
             <Row label="Subtotal" value={formatCOP(subtotal)} />

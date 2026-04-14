@@ -46,8 +46,8 @@ export default function WhatsappFab() {
 
   return (
     <div
-      className={`fixed bottom-20 right-5 md:bottom-5 z-40 flex flex-col items-end gap-3 transition-opacity duration-200 ${
-        hidden ? 'md:opacity-100 opacity-0 pointer-events-none md:pointer-events-auto' : ''
+      className={`fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-5 lg:bottom-5 lg:right-5 z-40 flex flex-col items-end gap-3 transition-opacity duration-200 ${
+        hidden ? 'lg:opacity-100 opacity-0 pointer-events-none lg:pointer-events-auto' : ''
       }`}
     >
       {/* Mini-menú de acciones */}
@@ -73,7 +73,7 @@ export default function WhatsappFab() {
         <div className="relative bg-white shadow-soft rounded-2xl px-4 py-2.5 border border-rose-150 max-w-[220px] mr-1 animate-in fade-in slide-in-from-right-2">
           <button
             onClick={() => setShowTooltip(false)}
-            className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-ink-900 text-white text-[10px] grid place-items-center shadow"
+            className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-ink-900 text-white text-fluid-xs grid place-items-center shadow"
             aria-label="Cerrar"
           >
             ×
@@ -120,7 +120,7 @@ function ChatCard({
       </span>
       <span className="flex-1">
         <span className="block text-sm font-semibold text-ink-900">{title}</span>
-        <span className="block text-[11px] text-ink-600">{subtitle}</span>
+        <span className="block text-fluid-xs text-ink-600">{subtitle}</span>
       </span>
       <span className="text-[#25D366] text-xl">›</span>
     </a>

@@ -54,26 +54,26 @@ export default function ConfirmModal({
 
   return (
     <div
-      className="fixed inset-0 z-[90] bg-ink-900/60 backdrop-blur-sm grid place-items-center p-4 animate-in fade-in"
+      className="fixed inset-0 z-[90] bg-ink-900/60 backdrop-blur-sm grid place-items-center p-4 sm:p-6 animate-in fade-in overflow-y-auto"
       onClick={onClose}
     >
       <div
-        className={`bg-rose-50 rounded-3xl p-7 w-full max-w-md ring-4 ${palette.ring} shadow-2xl animate-in zoom-in-95`}
+        className={`bg-rose-50 rounded-3xl p-6 sm:p-7 w-full max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto ring-4 ${palette.ring} shadow-2xl animate-in zoom-in-95`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start gap-4">
-          <div className={`grid place-items-center w-12 h-12 rounded-2xl bg-white border border-rose-150 ${palette.icon}`}>
+          <div className={`grid place-items-center w-12 h-12 rounded-2xl bg-white border border-rose-150 ${palette.icon} shrink-0`}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M12 9v4M12 17h.01" strokeLinecap="round" />
               <path d="M10.29 3.86 1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" strokeLinejoin="round" />
             </svg>
           </div>
-          <div className="flex-1">
-            <h3 className="font-serif text-xl text-ink-900">{title}</h3>
-            {description && <p className="text-sm text-ink-700 mt-1.5 leading-relaxed">{description}</p>}
+          <div className="flex-1 min-w-0">
+            <h3 className="font-serif text-fluid-xl text-ink-900">{title}</h3>
+            {description && <p className="text-fluid-sm text-ink-700 mt-1.5 leading-relaxed">{description}</p>}
           </div>
         </div>
-        <div className="mt-6 flex gap-3">
+        <div className="mt-6 flex flex-col-reverse xs:flex-row gap-3">
           <button onClick={onClose} disabled={loading} className="btn-ghost flex-1">
             {cancelLabel}
           </button>

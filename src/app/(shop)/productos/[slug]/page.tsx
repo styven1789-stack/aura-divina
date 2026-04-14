@@ -121,7 +121,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ slug
           {/* Ficha */}
           <div className="flex flex-col">
             <Eyebrow>{categoryLabel}</Eyebrow>
-            <h1 className="h-display text-4xl md:text-5xl text-ink-900 mt-2 leading-[1.1]">
+            <h1 className="h-display text-fluid-4xl text-ink-900 mt-2 leading-[1.1]">
               {product.name}
             </h1>
 
@@ -207,7 +207,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ slug
             titleSize="md"
             className="mb-8"
           />
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
             {related.map((p) => (
               <ProductCard key={p.id} p={p} />
             ))}

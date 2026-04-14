@@ -26,7 +26,7 @@ export default async function CatalogPage({
     <section className="container-aura py-16">
       <div className="text-center mb-10">
         <p className="text-xs uppercase tracking-widest2 text-gold-600 mb-2">Catálogo</p>
-        <h1 className="h-display text-5xl md:text-6xl text-ink-900">Toda la colección</h1>
+        <h1 className="h-display text-fluid-5xl text-ink-900">Toda la colección</h1>
         <p className="mt-3 text-ink-700/70 max-w-2xl mx-auto">
           Descubre cada pieza diseñada para acompañarte en tus momentos más divinos.
         </p>
@@ -55,7 +55,7 @@ export default async function CatalogPage({
       {items.length === 0 ? (
         <p className="text-center text-ink-600 py-20">No hay productos en esta categoría.</p>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 3xl:grid-cols-5 gap-4 md:gap-5">
           {items.map((p) => (
             <ProductCard key={p.id} p={p} />
           ))}

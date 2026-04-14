@@ -61,12 +61,12 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md bg-rose-50/85 border-b border-rose-150">
-      <div className="container-aura flex items-center justify-between h-20 gap-8">
+      <div className="container-aura flex items-center justify-between h-16 md:h-20 gap-4 md:gap-6 lg:gap-8">
         <Link href="/" className="shrink-0">
           <Logo variant="horizontal" size="sm" />
         </Link>
 
-        <nav className="hidden md:flex items-center gap-7">
+        <nav className="hidden md:flex items-center gap-5 lg:gap-7">
           {NAV.map((n) => (
             <Link
               key={n.href}
@@ -101,7 +101,7 @@ export default function Navbar() {
             <Bag size={18} />
             <span className="text-sm hidden sm:inline">Carrito</span>
             {mounted && count > 0 && (
-              <span className="absolute -top-2 -right-2 bg-gold-500 text-ink-900 text-[10px] font-bold rounded-full w-5 h-5 grid place-items-center shadow">
+              <span className="absolute -top-2 -right-2 bg-gold-500 text-ink-900 text-fluid-xs font-bold rounded-full w-5 h-5 grid place-items-center shadow">
                 {count}
               </span>
             )}
@@ -150,6 +150,8 @@ export default function Navbar() {
             className="md:hidden btn-ghost !p-2.5"
             onClick={() => setOpen((v) => !v)}
             aria-label="Menú"
+            aria-expanded={open}
+            aria-controls="mobile-menu"
           >
             <MenuIcon />
           </button>
@@ -157,7 +159,10 @@ export default function Navbar() {
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-rose-150 bg-rose-50">
+        <div
+          id="mobile-menu"
+          className="md:hidden border-t border-rose-150 bg-rose-50 max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain"
+        >
           <div className="container-aura flex flex-col py-3">
             {NAV.map((n) => (
               <Link

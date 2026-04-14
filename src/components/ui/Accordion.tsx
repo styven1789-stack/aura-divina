@@ -55,7 +55,7 @@ export default function Accordion({
               onClick={() => toggle(item.id)}
               aria-expanded={isOpen}
               aria-controls={`accordion-${item.id}`}
-              className="w-full flex items-center justify-between gap-4 py-4 text-left font-serif text-lg text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 rounded-2xl px-2"
+              className="w-full flex items-center justify-between gap-4 py-3 sm:py-4 text-left font-serif text-fluid-lg text-ink-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 rounded-2xl px-2 tap-target"
             >
               <span>{item.title}</span>
               <span className={`text-gold-600 transition-transform ${isOpen ? 'rotate-180' : ''}`}>
@@ -65,7 +65,7 @@ export default function Accordion({
             {isOpen && (
               <div
                 id={`accordion-${item.id}`}
-                className="pb-4 px-2 text-sm text-ink-700 leading-relaxed animate-in fade-in"
+                className="pb-4 px-2 text-fluid-sm text-ink-700 leading-relaxed animate-in fade-in"
               >
                 {item.content}
               </div>

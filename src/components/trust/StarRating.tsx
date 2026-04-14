@@ -16,9 +16,9 @@ interface StarRatingProps {
 
 const SIZE_PX: Record<Size, number> = { sm: 14, md: 16, lg: 22 };
 const COUNT_CLS: Record<Size, string> = {
-  sm: 'text-[11px]',
-  md: 'text-xs',
-  lg: 'text-sm',
+  sm: 'text-fluid-xs',
+  md: 'text-fluid-xs',
+  lg: 'text-fluid-sm',
 };
 
 export default function StarRating({

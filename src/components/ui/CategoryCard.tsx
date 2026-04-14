@@ -29,9 +29,9 @@ export default function CategoryCard({ title, href, image, subtitle, className =
       />
       <div className="absolute inset-0 bg-gradient-to-t from-ink-900/70 via-ink-900/20 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
-        {subtitle && <p className="eyebrow text-gold-300 mb-2 !text-[10px]">{subtitle}</p>}
-        <h3 className="font-serif text-3xl md:text-4xl leading-tight">{title}</h3>
-        <div className="mt-3 inline-flex items-center gap-1 text-sm opacity-90 group-hover:gap-2 transition-all">
+        {subtitle && <p className="eyebrow text-gold-300 mb-2 !text-fluid-xs">{subtitle}</p>}
+        <h3 className="font-serif text-fluid-3xl leading-tight">{title}</h3>
+        <div className="mt-3 inline-flex items-center gap-1 text-fluid-sm opacity-90 group-hover:gap-2 transition-all">
           Explorar <ChevronRight size={14} />
         </div>
       </div>

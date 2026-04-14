@@ -4,9 +4,9 @@ import { InstagramIcon, FacebookIcon } from './icons';
 
 export default function Footer() {
   return (
-    <footer className="mt-24 bg-ink-900 text-rose-50">
-      <div className="container-aura py-16 grid md:grid-cols-4 gap-10">
-        <div className="md:col-span-2">
+    <footer className="mt-16 md:mt-24 bg-ink-900 text-rose-50">
+      <div className="container-aura py-12 md:py-16 lg:py-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
+        <div className="sm:col-span-2 md:col-span-2">
           <Logo variant="full" invert />
           <p className="mt-6 max-w-md text-sm text-rose-150/80 leading-relaxed">
             Aura Divina es una marca colombiana de accesorios premium para mujeres que aman brillar
@@ -64,7 +64,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-rose-50/10">
-        <div className="container-aura py-6 flex flex-col md:flex-row justify-between gap-3 text-xs text-rose-150/60">
+        <div className="container-aura py-5 pb-[calc(6rem+env(safe-area-inset-bottom))] lg:pb-5 flex flex-col md:flex-row justify-between gap-3 text-fluid-xs text-rose-150/60">
           <span>© {new Date().getFullYear()} Aura Divina. Todos los derechos reservados.</span>
           <span className="tracking-widest uppercase">Tu esencia · Tu estilo · Tu aura divina</span>
         </div>

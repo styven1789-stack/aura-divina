@@ -62,11 +62,11 @@ export default function NewsletterForm({ variant = 'inline', className = '' }: N
 
   return (
     <section className={`container-aura py-14 ${className}`}>
-      <div className="card-luxe p-8 md:p-12 text-center max-w-3xl mx-auto">
+      <div className="card-luxe p-6 sm:p-8 md:p-12 text-center max-w-3xl mx-auto">
         <div className="inline-grid place-items-center w-14 h-14 rounded-2xl bg-rose-100 text-gold-600 mb-5">
           <SparkleIcon size={24} />
         </div>
-        <h3 className="font-serif text-3xl md:text-4xl text-ink-900">Enredémonos bonito</h3>
+        <h3 className="font-serif text-fluid-4xl text-ink-900">Enredémonos bonito</h3>
         <p className="mt-3 text-ink-700/70 max-w-md mx-auto">
           Suscríbete y recibe 10% OFF en tu primera compra. Noticias de lanzamientos y promociones exclusivas — sin spam, lo prometemos.
         </p>
@@ -77,6 +77,10 @@ export default function NewsletterForm({ variant = 'inline', className = '' }: N
             onChange={(e) => setEmail(e.target.value)}
             placeholder="tu@correo.com"
             required
+            inputMode="email"
+            autoComplete="email"
+            autoCapitalize="off"
+            spellCheck={false}
             className="input-aura flex-1"
             disabled={submitted}
             aria-label="Correo electrónico"

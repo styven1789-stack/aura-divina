@@ -56,17 +56,17 @@ export default async function AdminDashboard() {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-end justify-between mb-8 flex-wrap gap-3">
+      <div className="flex flex-col xs:flex-row items-start xs:items-end justify-between mb-6 md:mb-8 gap-3">
         <div>
-          <p className="text-xs uppercase tracking-widest2 text-gold-600">Panel administrativo</p>
-          <h1 className="h-display text-4xl text-ink-900">Dashboard</h1>
-          <p className="text-ink-700/70 mt-1 text-sm">
+          <p className="text-fluid-xs uppercase tracking-widest2 text-gold-600">Panel administrativo</p>
+          <h1 className="h-display text-fluid-4xl text-ink-900">Dashboard</h1>
+          <p className="text-ink-700/70 mt-1 text-fluid-sm">
             {orders.length} pedidos · {activeProducts} productos activos · ticket promedio {formatCOP(avgTicket)}
           </p>
         </div>
-        <div className="flex gap-2">
-          <Link href="/admin/productos?new=1" className="btn-ghost !py-2.5 !px-4 text-sm">+ Producto</Link>
-          <Link href="/admin/zonas" className="btn-ghost !py-2.5 !px-4 text-sm">+ Zona</Link>
+        <div className="flex flex-wrap gap-2 w-full xs:w-auto">
+          <Link href="/admin/productos?new=1" className="btn-ghost !py-2.5 !px-4 text-fluid-sm flex-1 xs:flex-initial text-center">+ Producto</Link>
+          <Link href="/admin/zonas" className="btn-ghost !py-2.5 !px-4 text-fluid-sm flex-1 xs:flex-initial text-center">+ Zona</Link>
         </div>
       </div>
 
@@ -109,23 +109,23 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Sparkline + acciones rápidas */}
-      <div className="grid lg:grid-cols-3 gap-4 mb-6">
-        <div className="lg:col-span-2 card-soft p-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+        <div className="lg:col-span-2 card-soft p-4 sm:p-6">
           <div className="flex items-baseline justify-between mb-4">
             <div>
-              <p className="text-[10px] uppercase tracking-widest2 text-gold-600">Últimos 7 días</p>
-              <h2 className="font-serif text-2xl text-ink-900">Ingresos</h2>
+              <p className="text-fluid-xs uppercase tracking-widest2 text-gold-600">Últimos 7 días</p>
+              <h2 className="font-serif text-fluid-2xl text-ink-900">Ingresos</h2>
             </div>
-            <p className="text-sm text-ink-700">
+            <p className="text-fluid-sm text-ink-700">
               Total semana: <strong className="text-gold-600">{formatCOP(days.reduce((s, d) => s + d.revenue, 0))}</strong>
             </p>
           </div>
           <Sparkline days={days} />
         </div>
 
-        <div className="card-soft p-6">
-          <p className="text-[10px] uppercase tracking-widest2 text-gold-600 mb-1">Top productos</p>
-          <h2 className="font-serif text-2xl text-ink-900 mb-4">Más vendidos</h2>
+        <div className="card-soft p-4 sm:p-6">
+          <p className="text-fluid-xs uppercase tracking-widest2 text-gold-600 mb-1">Top productos</p>
+          <h2 className="font-serif text-fluid-2xl text-ink-900 mb-4">Más vendidos</h2>
           {topProducts.length === 0 ? (
             <p className="text-sm text-ink-600">Aún sin ventas confirmadas.</p>
           ) : (
@@ -140,7 +140,7 @@ export default async function AdminDashboard() {
                   )}
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-ink-900 truncate">{p.name}</p>
-                    <p className="text-[11px] text-ink-600">{p.qty} und · {formatCOP(p.revenue)}</p>
+                    <p className="text-fluid-xs text-ink-600">{p.qty} und · {formatCOP(p.revenue)}</p>
                   </div>
                 </li>
               ))}
@@ -150,49 +150,74 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Recent orders */}
-      <div className="card-soft p-6">
+      <div className="card-soft p-4 sm:p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-serif text-2xl text-ink-900">Pedidos recientes</h2>
-          <Link href="/admin/pedidos" className="text-xs uppercase tracking-widest text-gold-600 hover:text-gold-700">Ver todos →</Link>
+          <h2 className="font-serif text-fluid-2xl text-ink-900">Pedidos recientes</h2>
+          <Link href="/admin/pedidos" className="text-fluid-xs uppercase tracking-widest text-gold-600 hover:text-gold-700">Ver todos →</Link>
         </div>
         {recent.length === 0 ? (
           <div className="py-12 text-center">
             <div className="text-4xl mb-2">✨</div>
-            <p className="text-ink-600 text-sm">Aún no hay pedidos. ¡Pronto llegará tu primera venta!</p>
+            <p className="text-ink-600 text-fluid-sm">Aún no hay pedidos. ¡Pronto llegará tu primera venta!</p>
           </div>
         ) : (
-          <div className="overflow-x-auto -mx-6 px-6">
-            <table className="w-full text-sm">
-              <thead className="text-left text-[10px] uppercase tracking-widest2 text-ink-600 border-b border-rose-150">
-                <tr>
-                  <th className="py-2">Código</th>
-                  <th>Cliente</th>
-                  <th>Zona</th>
-                  <th>Estado</th>
-                  <th>Fecha</th>
-                  <th className="text-right">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recent.map((o: Order) => (
-                  <tr key={o.id} className="border-b border-rose-150/60 hover:bg-rose-50/50">
-                    <td className="py-3">
-                      <Link href={`/admin/pedidos?status=${o.status}`} className="font-mono text-gold-600 hover:underline">{o.code}</Link>
-                    </td>
-                    <td>{o.shipping.fullName}</td>
-                    <td>{o.shipping.neighborhood}</td>
-                    <td>
-                      <span className={`inline-block text-[10px] uppercase tracking-widest px-2 py-1 rounded-full border ${ORDER_STATUS_COLOR[o.status]}`}>
-                        {ORDER_STATUS_LABEL[o.status]}
-                      </span>
-                    </td>
-                    <td className="text-xs text-ink-600"><ClientDate iso={o.createdAt} /></td>
-                    <td className="text-right font-semibold">{formatCOP(o.totalCOP)}</td>
+          <>
+            {/* Card view móvil */}
+            <ul className="md:hidden grid gap-3">
+              {recent.map((o: Order) => (
+                <li key={o.id}>
+                  <Link
+                    href={`/admin/pedidos?status=${o.status}`}
+                    className="block rounded-2xl bg-white/70 border border-rose-150 hover:border-gold-500 transition p-4 grid grid-cols-[1fr_auto] gap-x-3 gap-y-1.5 items-center"
+                  >
+                    <span className="font-mono text-gold-600 font-semibold">{o.code}</span>
+                    <span className={`text-fluid-xs uppercase tracking-widest px-2 py-1 rounded-full border ${ORDER_STATUS_COLOR[o.status]}`}>
+                      {ORDER_STATUS_LABEL[o.status]}
+                    </span>
+                    <span className="col-span-2 text-fluid-sm text-ink-700 truncate">
+                      {o.shipping.fullName} · {o.shipping.neighborhood}
+                    </span>
+                    <span className="text-fluid-xs text-ink-600"><ClientDate iso={o.createdAt} /></span>
+                    <span className="font-semibold text-ink-900 justify-self-end">{formatCOP(o.totalCOP)}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            {/* Tabla desktop */}
+            <div className="hidden md:block overflow-x-auto -mx-4 sm:-mx-6 px-4 sm:px-6">
+              <table className="w-full text-fluid-sm">
+                <thead className="text-left text-fluid-xs uppercase tracking-widest2 text-ink-600 border-b border-rose-150">
+                  <tr>
+                    <th className="py-2">Código</th>
+                    <th>Cliente</th>
+                    <th>Zona</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th className="text-right">Total</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {recent.map((o: Order) => (
+                    <tr key={o.id} className="border-b border-rose-150/60 hover:bg-rose-50/50">
+                      <td className="py-3">
+                        <Link href={`/admin/pedidos?status=${o.status}`} className="font-mono text-gold-600 hover:underline">{o.code}</Link>
+                      </td>
+                      <td>{o.shipping.fullName}</td>
+                      <td>{o.shipping.neighborhood}</td>
+                      <td>
+                        <span className={`inline-block text-fluid-xs uppercase tracking-widest px-2 py-1 rounded-full border ${ORDER_STATUS_COLOR[o.status]}`}>
+                          {ORDER_STATUS_LABEL[o.status]}
+                        </span>
+                      </td>
+                      <td className="text-fluid-xs text-ink-600"><ClientDate iso={o.createdAt} /></td>
+                      <td className="text-right font-semibold">{formatCOP(o.totalCOP)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
     </div>
@@ -224,15 +249,15 @@ function KpiCard({
     >
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-[10px] uppercase tracking-widest2 text-ink-600">{label}</p>
-          <p className="mt-2 text-3xl font-serif text-ink-900 leading-none">{value}</p>
-          <p className="text-[11px] text-ink-700/70 mt-2">{hint}</p>
+          <p className="text-fluid-xs uppercase tracking-widest2 text-ink-600">{label}</p>
+          <p className="mt-2 text-fluid-3xl font-serif text-ink-900 leading-none">{value}</p>
+          <p className="text-fluid-xs text-ink-700/70 mt-2">{hint}</p>
         </div>
         <div className={`grid place-items-center w-10 h-10 rounded-2xl bg-white/70 border border-rose-150 text-xl ${urgent ? 'animate-pulse' : ''}`}>
           {icon}
         </div>
       </div>
-      <span className="absolute bottom-3 right-4 text-[10px] uppercase tracking-widest text-ink-600 opacity-0 group-hover:opacity-100 transition">
+      <span className="absolute bottom-3 right-4 text-fluid-xs uppercase tracking-widest text-ink-600 opacity-0 group-hover:opacity-100 transition">
         Ver →
       </span>
     </Link>
@@ -267,11 +292,11 @@ function Sparkline({ days }: { days: { label: string; revenue: number }[] }) {
           <circle key={i} cx={p.x} cy={p.y} r="1.6" fill="#a8884f" />
         ))}
       </svg>
-      <div className="grid grid-cols-7 mt-2 text-[10px] uppercase tracking-widest text-ink-600">
+      <div className="grid grid-cols-7 mt-2 text-fluid-xs uppercase tracking-widest text-ink-600">
         {days.map((d, i) => (
           <div key={i} className="text-center">
             <div>{d.label}</div>
-            <div className="text-ink-900 font-medium normal-case tracking-normal text-[10px] mt-0.5">
+            <div className="text-ink-900 font-medium normal-case tracking-normal text-fluid-xs mt-0.5">
               {d.revenue > 0 ? `$${(d.revenue / 1000).toFixed(0)}k` : '—'}
             </div>
           </div>

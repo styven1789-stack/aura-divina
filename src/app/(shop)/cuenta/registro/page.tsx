@@ -42,21 +42,21 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-[80vh] hero-aura flex items-center justify-center p-6">
+    <div className="min-h-[80dvh] hero-aura flex items-center justify-center p-4 sm:p-6">
       <div className="w-full max-w-md">
-        <form onSubmit={onSubmit} className="card-soft p-10">
+        <form onSubmit={onSubmit} className="card-soft p-6 sm:p-10">
           <div className="flex justify-center">
             <Logo variant="stacked" />
           </div>
           <div className="mt-8 gold-divider" />
-          <h1 className="mt-6 font-serif text-3xl text-center text-ink-900">Crear cuenta</h1>
+          <h1 className="mt-6 font-serif text-fluid-3xl text-center text-ink-900">Crear cuenta</h1>
           <p className="text-center text-xs uppercase tracking-widest text-ink-600 mt-1">Guarda direcciones y pedidos</p>
 
           <a href="/api/auth/google/start" className="btn-ghost w-full mt-8 inline-flex items-center justify-center gap-2">
             <GoogleIcon /> Continuar con Google
           </a>
 
-          <div className="my-6 flex items-center gap-3 text-[10px] uppercase tracking-widest2 text-ink-600">
+          <div className="my-6 flex items-center gap-3 text-fluid-xs uppercase tracking-widest2 text-ink-600">
             <span className="flex-1 h-px bg-rose-150" />
             <span>o con un formulario</span>
             <span className="flex-1 h-px bg-rose-150" />
@@ -65,20 +65,54 @@ export default function RegisterPage() {
           <div className="space-y-4">
             <div>
               <label className="label-aura">Nombre completo</label>
-              <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="input-aura" required />
+              <input
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className="input-aura"
+                autoComplete="name"
+                autoCapitalize="words"
+                required
+              />
             </div>
             <div>
               <label className="label-aura">Correo</label>
-              <input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="input-aura" type="email" required />
+              <input
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                className="input-aura"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                autoCapitalize="off"
+                spellCheck={false}
+                required
+              />
             </div>
             <div>
               <label className="label-aura">Celular (opcional)</label>
-              <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="input-aura" placeholder="3XXXXXXXXX" />
+              <input
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                className="input-aura"
+                placeholder="3XXXXXXXXX"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                pattern="[0-9]{10}"
+              />
             </div>
             <div>
               <label className="label-aura">Contraseña</label>
-              <input value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} className="input-aura" type="password" minLength={8} required />
-              <p className="text-[11px] text-ink-600 mt-1">Mínimo 8 caracteres.</p>
+              <input
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                className="input-aura"
+                type="password"
+                autoComplete="new-password"
+                minLength={8}
+                required
+              />
+              <p className="text-fluid-xs text-ink-600 mt-1">Mínimo 8 caracteres.</p>
             </div>
           </div>
 
@@ -86,7 +120,7 @@ export default function RegisterPage() {
             {loading ? 'Creando cuenta…' : 'Crear cuenta'}
           </button>
 
-          <p className="mt-6 text-center text-sm text-ink-700">
+          <p className="mt-6 text-center text-fluid-sm text-ink-700">
             ¿Ya tienes cuenta?{' '}
             <Link href="/cuenta/ingresar" className="text-gold-600 font-semibold hover:underline">
               Inicia sesión
